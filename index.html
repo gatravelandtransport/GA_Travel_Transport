@@ -508,10 +508,11 @@ var DOC_CONFIG = {
     { key:'tempat_titip', label:'Tempat Titip' },
     { key:'tanggal_terima', label:'Tanggal Terima' },
     { key:'penerima', label:'Penerima' },
-    { key:'keterangan', label:'Keterangan' }
+    { key:'keterangan', label:'Keterangan' },
+    { key:'bu', label:'BU (Badan Usaha)' }
   ],
   fields:[
-    { key:'kategori', label:'Kategori', type:'select', options:['KIR','Izin Trayek','STNK','SIM Driver','Lain-lain'], required:true },
+    { key:'kategori', label:'Kategori', type:'select', options:['IM','General Expens','SPL','SKD','Lain-lain'], required:true },
     { key:'nama_dokumen', label:'Nama Dokumen / Objek', type:'text', required:true },
     { key:'nomor_dokumen', label:'Nomor Dokumen', type:'text', required:true },
     { key:'tanggal_titip', label:'Tanggal Titip', type:'date', required:true },
@@ -519,7 +520,8 @@ var DOC_CONFIG = {
     { key:'tempat_titip', label:'Tempat Titip', type:'text', required:true },
     { key:'tanggal_terima', label:'Tanggal Terima (opsional, isi saat sudah diambil)', type:'date', required:false },
     { key:'penerima', label:'Penerima (opsional, isi saat sudah diambil)', type:'text', required:false },
-    { key:'keterangan', label:'Keterangan (opsional)', type:'text', required:false }
+    { key:'keterangan', label:'Keterangan (opsional)', type:'text', required:false },
+    { key:'bu', label:'BU (Badan Usaha)', type:'select', options:['HJF','KPS','OST','CKM'], required:true }
   ]
 };
 
@@ -527,34 +529,42 @@ var ARMADA_CONFIG = {
   bus:{
     idField:'id',
     columns:[
-      { key:'no_armada', label:'No Armada' },
+      { key:'bu', label:'BU (Badan Usaha)' },
+      { key:'no_lambung', label:'No Lambung' },
       { key:'jenis_armada', label:'Jenis Armada' },
       { key:'kapasitas', label:'Kapasitas' },
       { key:'tanggal_commissioning', label:'Commissioning' },
       { key:'status', label:'Status' }
     ],
     fields:[
-      { key:'no_armada', label:'No Armada', type:'text', required:true },
+      { key:'bu', label:'BU (Badan Usaha)', type:'select', options:['HJF','KPS','OST','CKM'], required:true },
+      { key:'no_lambung', label:'No Lambung', type:'text', required:true },
       { key:'jenis_armada', label:'Jenis Armada', type:'text', required:true },
       { key:'kapasitas', label:'Kapasitas (seat)', type:'number', required:true },
       { key:'tanggal_commissioning', label:'Tanggal Commissioning', type:'date', required:false },
-      { key:'status', label:'Status', type:'select', options:['Aktif','Perbaikan','Non-Aktif'], required:true }
+      { key:'status', label:'Status', type:'select', options:['Aktif','Standby','Breakdown'], required:true }
     ],
     getFn:'getBuses', addFn:'addBus', updateFn:'updateBus', deleteFn:'deleteBus'
   },
   driver:{
     idField:'id',
     columns:[
+      { key:'bu', label:'BU (Badan Usaha)' },
       { key:'nama', label:'Nama' },
-      { key:'no_sim', label:'No SIM' },
+      { key:'nik', label:'NIk' },
+      { key:'kimper', label:'Kimper' },
+      { key:'tgl_expired_kimper', label:'Tgl Expired Kimper' },
       { key:'no_hp', label:'No HP' },
       { key:'status', label:'Status' }
     ],
     fields:[
+      { key:'bu', label:'BU (Badan Usaha)', type:'select', options:['HJF','KPS','OST','CKM'], required:true },
       { key:'nama', label:'Nama Lengkap', type:'text', required:true },
-      { key:'no_sim', label:'Nomor SIM', type:'text', required:true },
+      { key:'nik', label:'NIK', type:'text', required:true },
+      { key:'kimper', label:'Kimper', type:'text', required:true },
+      { key:'tgl_expired_kimper', label:'Tgl Expired Kimper', type:'date', required:false },
       { key:'no_hp', label:'Nomor HP', type:'text', required:true },
-      { key:'status', label:'Status', type:'select', options:['Aktif','Cuti','Non-Aktif'], required:true }
+      { key:'status', label:'Status', type:'select', options:['Permanent','Kontrak','Skorsing'], required:true }
     ],
     getFn:'getDrivers', addFn:'addDriver', updateFn:'updateDriver', deleteFn:'deleteDriver'
   }
