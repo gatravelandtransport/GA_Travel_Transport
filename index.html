@@ -768,8 +768,8 @@ function renderDashboard(stats){
   document.getElementById('statDocsSub').textContent = stats.totalDocs>0 ? '100% Tersimpan aman' : 'Belum ada dokumen';
   document.getElementById('statBuses').textContent = stats.totalBuses;
   document.getElementById('statBusesSub').textContent = stats.busAktif+' Aktif • '+stats.busBreakdown+' Breakdown';
-  document.getElementById('statDrivers').textContent = stats.driverAktif;
-  document.getElementById('statDriversSub').textContent = stats.driverPermanent+' Permanent •  '+stats.driverContrak+' Contrak';
+  document.getElementById('statDrivers').textContent = stats.driverPermanent;
+  document.getElementById('statDriversSub').textContent = stats.driverPermanent+' Permanent •  '+stats.driverKontrak+' Kontrak';
   document.getElementById('statCompliance').textContent = stats.compliance+'%';
   var subEl = document.getElementById('statComplianceSub');
   subEl.textContent = stats.compliance>=80 ? 'Sangat Aman' : (stats.compliance>=50 ? 'Berkas Yang Sudah Masuk' : 'Butuh Tindakan Segera');
