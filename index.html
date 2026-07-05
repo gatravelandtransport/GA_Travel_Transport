@@ -769,7 +769,7 @@ function renderDashboard(stats){
   document.getElementById('statBuses').textContent = stats.totalBuses;
   document.getElementById('statBusesSub').textContent = stats.busAktif+' Aktif • '+stats.busBreakdown+' Breakdown';
   document.getElementById('statDrivers').textContent = stats.driverAktif;
-  document.getElementById('statDriversSub').textContent = stats.driverAktif+' Siap Jalan • '+stats.driverLain+' Kontrak/Skorsing';
+  document.getElementById('statDriversSub').textContent = stats.driverAktif+' Permanent • '+stats.driverLain+' Kontrak/Skorsing';
   document.getElementById('statCompliance').textContent = stats.compliance+'%';
   var subEl = document.getElementById('statComplianceSub');
   subEl.textContent = stats.compliance>=80 ? 'Sangat Aman' : (stats.compliance>=50 ? 'Berkas Yang Sudah Masuk' : 'Butuh Tindakan Segera');
