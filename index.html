@@ -302,7 +302,7 @@
           <div class="stat-card">
             <div class="stat-top"><div class="stat-label">PENGEMUDI AKTIF</div><div class="stat-icon" style="background:var(--ok-bg);color:var(--ok);">👥</div></div>
             <div class="stat-value" id="statDrivers">–</div>
-            <div class="stat-sub" id="statDriversSub">– Siap Jalan</div>
+            <div class="stat-sub" id="statDriversSub">– Permanent</div>
           </div>
           <div class="stat-card">
             <div class="stat-top"><div class="stat-label">DOKUMEN SUDAH DIAMBIL</div><div class="stat-icon" style="background:var(--ok-bg);color:var(--ok);">🛡️</div></div>
@@ -767,7 +767,7 @@ function renderDashboard(stats){
   document.getElementById('statDocs').textContent = stats.totalDocs;
   document.getElementById('statDocsSub').textContent = stats.totalDocs>0 ? '100% Tersimpan aman' : 'Belum ada dokumen';
   document.getElementById('statBuses').textContent = stats.totalBuses;
-  document.getElementById('statBusesSub').textContent = stats.busAktif+' Aktif • '+stats.busBreakdown+' Breakdown';
+  document.getElementById('statBusesSub').textContent = stats.busAktif+' Aktif • '+stats.busBreakdown+' Breakdown/Standby';
   document.getElementById('statDrivers').textContent = stats.driverAktif;
   document.getElementById('statDriversSub').textContent = stats.driverAktif+' Permanent • '+stats.driverLain+' Kontrak/Skorsing';
   document.getElementById('statCompliance').textContent = stats.compliance+'%';
