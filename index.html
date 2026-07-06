@@ -1191,7 +1191,7 @@ function deleteUserRow(id){
 /* =========================================================================
    MONITORING ARMADA
 ========================================================================= */
-var TRIP_SLOTS = ['Pagi','Pagi','Pagi','Pagi','Sore','Sore','Sore','Sore'];
+var TRIP_SLOTS = ['Pagi','Pagi','Pagi','Pagi','Pagi','Sore','Sore','Sore','Sore','Sore'];
 
 document.querySelectorAll('#view-monitoring .subtab').forEach(function(el){
   el.addEventListener('click', function(){
@@ -1249,7 +1249,7 @@ function renderMonitoringTable(){
   html+='</tbody></table>'; wrap.innerHTML=html;
 }
 
-/** Buka form dengan 8 slot trip (Pagi-Sore) sekaligus untuk satu No Lambung. */
+/** Buka form dengan 10 slot trip (Pagi-Sore) sekaligus untuk satu No Lambung. */
 function openMonitoringForm(noLambung){
   state.monitoringEditingNoLambung = noLambung || null;
   document.getElementById('monitoringFormTitle').textContent = noLambung ? 'Edit Jadwal Armada' : 'Tambah Jadwal Armada';
