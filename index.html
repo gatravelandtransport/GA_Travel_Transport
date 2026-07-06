@@ -334,10 +334,10 @@
           <input type="text" class="search-input" id="searchArsip" placeholder="Cari nomor dokumen, kategori, atau nama...">
           <select class="search-input" style="flex:0 0 170px;" id="filterArsipKategori">
             <option value="">Semua Kategori</option>
-            <option value="KIR">KIR</option>
-            <option value="Izin Trayek">Izin Trayek</option>
-            <option value="STNK">STNK</option>
-            <option value="SIM Driver">SIM Driver</option>
+            <option value="IM">IM</option>
+            <option value="General Expens">General Expens</option>
+            <option value="SPL">SPL</option>
+            <option value="SKD">SKD</option>
             <option value="Lain-lain">Lain-lain</option>
           </select>
           <select class="search-input" style="flex:0 0 170px;" id="filterArsipStatus">
@@ -700,7 +700,7 @@ var MONITORING_CONFIG = {
   ],
   fields:[
     { key:'no_lambung', label:'No Lambung', type:'text', required:true },
-    { key:'trip', label:'Trip', type:'select', options:['Pagi','Pagi','Pagi','Pagi','Malam','Malam','Malam','Malam'], required:true },
+    { key:'trip', label:'Trip', type:'select', options:['I','II','III','IV','V','VI','VII','VIII'], required:true },
     { key:'waktu', label:'Waktu (Time)', type:'text', required:true },
     { key:'pickup', label:'Pick Up', type:'text', required:true },
     { key:'dropoff', label:'Drop Off', type:'text', required:true }
@@ -1191,7 +1191,7 @@ function deleteUserRow(id){
 /* =========================================================================
    MONITORING ARMADA
 ========================================================================= */
-var TRIP_SLOTS = ['I','II','III','IV','V','VI','VII','VIII'];
+var TRIP_SLOTS = ['Pagi','Pagi','Pagi','Pagi','Sore','Sore','Sore','Sore'];
 
 document.querySelectorAll('#view-monitoring .subtab').forEach(function(el){
   el.addEventListener('click', function(){
@@ -1249,7 +1249,7 @@ function renderMonitoringTable(){
   html+='</tbody></table>'; wrap.innerHTML=html;
 }
 
-/** Buka form dengan 8 slot trip (I-VIII) sekaligus untuk satu No Lambung. */
+/** Buka form dengan 8 slot trip (Pagi-Sore) sekaligus untuk satu No Lambung. */
 function openMonitoringForm(noLambung){
   state.monitoringEditingNoLambung = noLambung || null;
   document.getElementById('monitoringFormTitle').textContent = noLambung ? 'Edit Jadwal Armada' : 'Tambah Jadwal Armada';
@@ -1309,7 +1309,7 @@ function deleteMonitoringBusRow(noLambung){
  * Tampilan "Lihat" — meniru gaya tabel jadwal fisik (header dwibahasa,
  * kolom No Lambung & Trip digabung/merge, pewarnaan berselang per grup trip).
  */
-var TRIP_ORDER = ['I','II','III','IV','V','VI','VII','VIII','IX','X'];
+var TRIP_ORDER = ['Pagi','Pagi','Pagi','Pagi','Pagi','Sore','Sore','Sore','Sore','Sore'];
 function viewMonitoringDetail(noLambung){
   var rows = state.monitoring.filter(function(r){ return String(r.no_lambung)===String(noLambung); });
   rows.sort(function(a,b){ return TRIP_ORDER.indexOf(a.trip) - TRIP_ORDER.indexOf(b.trip); });
