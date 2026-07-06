@@ -284,8 +284,8 @@
       <div class="view active" id="view-dashboard">
         <div class="banner">
           <div>
-            <h2>Selamat Datang di Terminal Arsip GA Travel & Transport 🚛</h2>
-            <p>Pusat monitoring izin trayek, kelaikan KIR, kepatuhan STNK armada, serta keabsahan SIM pengemudi aktif secara real-time.</p>
+            <h2>Selamat Datang Di Bank Arsip GA Travel & Transport 🚛</h2>
+            <p>Pusat monitoring berkas, armada, driver, serta peralatan secara real-time.</p>
           </div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;">
             <button class="btn" onclick="switchView('arsip')">Lihat Arsip Dokumen ↗</button>
@@ -581,6 +581,7 @@ var SESSION_KEY = 'ga_travel_session';
 var DOC_CONFIG = {
   idField:'id',
   columns:[
+    { key:'bu', label:'BU (Badan Usaha)' },
     { key:'kategori', label:'Kategori' },
     { key:'nama_dokumen', label:'Nama Dokumen' },
     { key:'nomor_dokumen', label:'Nomor Dokumen' },
@@ -592,7 +593,8 @@ var DOC_CONFIG = {
     { key:'keterangan', label:'Keterangan' }
   ],
   fields:[
-    { key:'kategori', label:'Kategori', type:'select', options:['KIR','Izin Trayek','STNK','SIM Driver','Lain-lain'], required:true },
+    { key:'bu', label:'BU (Badan Usaha)', type:'select', options:['HJF','KPS','OST','CKM'], required:true },
+    { key:'kategori', label:'Kategori', type:'select', options:['IM','General Expens','SPL','SKD','Lain-lain'], required:true },
     { key:'nama_dokumen', label:'Nama Dokumen / Objek', type:'text', required:true },
     { key:'nomor_dokumen', label:'Nomor Dokumen', type:'text', required:true },
     { key:'tanggal_titip', label:'Tanggal Titip', type:'date', required:true },
@@ -608,18 +610,22 @@ var ARMADA_CONFIG = {
   bus:{
     idField:'id',
     columns:[
-      { key:'no_armada', label:'No Armada' },
+      { key:'bu', label:'BU (Badan Usaha)' },
+      { key:'no_lambung', label:'No Lambung' },
       { key:'jenis_armada', label:'Jenis Armada' },
       { key:'kapasitas', label:'Kapasitas' },
       { key:'tanggal_commissioning', label:'Commissioning' },
-      { key:'status', label:'Status' }
+      { key:'status', label:'Status' },
+      { key:'rute', label:'Rute' },
     ],
     fields:[
-      { key:'no_armada', label:'No Armada', type:'text', required:true },
-      { key:'jenis_armada', label:'Jenis Armada', type:'text', required:true },
+      { key:'bu', label:'BU (Badan Usaha)', type:'select', options:['HJF','KPS','OST','CKM'], required:true },
+      { key:'no_lambung', label:'No Lambung', type:'text', required:true },
+      { key:'jenis_armada', label:'Jenis Armada', type:'select', options:['LV','LT','DT','MH','BUS'], required:true },
       { key:'kapasitas', label:'Kapasitas (seat)', type:'number', required:true },
       { key:'tanggal_commissioning', label:'Tanggal Commissioning', type:'date', required:false },
-      { key:'status', label:'Status', type:'select', options:['Aktif','Standby','Breakdown'], required:true }
+      { key:'status', label:'Status', type:'select', options:['Aktif','Standby','Breakdown'], required:true },
+      { key:'rute', label:'Rute', type:'text', required:true }
     ],
     statusColors:{ 'Aktif':'status-aktif', 'Standby':'status-lain', 'Breakdown':'status-nonaktif' },
     getFn:'getBuses', addFn:'addBus', updateFn:'updateBus', deleteFn:'deleteBus'
@@ -627,14 +633,18 @@ var ARMADA_CONFIG = {
   driver:{
     idField:'id',
     columns:[
+      { key:'bu', label:'BU (Badan Usaha)' },
       { key:'nama', label:'Nama' },
-      { key:'no_sim', label:'No SIM' },
+      { key:'kimper', label:'Kimper' },
+      { key:'tgl_expired_kimper', label:'Tgl_Expired_Kimper' },
       { key:'no_hp', label:'No HP' },
       { key:'status', label:'Status' }
     ],
     fields:[
+      { key:'bu', label:'BU (Badan Usaha)', type:'select', options:['HJF','KPS','OST','CKM'], required:true },
       { key:'nama', label:'Nama Lengkap', type:'text', required:true },
-      { key:'no_sim', label:'Nomor SIM', type:'text', required:true },
+      { key:'kimper', label:'Kimper', type:'text', required:true },
+      { key:'tgl_expired_kimper', label:'Tgl_Expired_Kimper', type:'date', required:false },
       { key:'no_hp', label:'Nomor HP', type:'text', required:true },
       { key:'status', label:'Status', type:'select', options:['Permanent','Kontrak','Orientasi'], required:true }
     ],
@@ -865,7 +875,7 @@ function renderDashboard(stats){
   document.getElementById('statDriversSub').textContent = stats.driverPermanent+' Permanent • '+stats.driverKontrak+' Kontrak • '+stats.driverOrientasi+' Orientasi';
   document.getElementById('statCompliance').textContent = stats.compliance+'%';
   var subEl = document.getElementById('statComplianceSub');
-  subEl.textContent = stats.compliance>=80 ? 'Sangat Aman' : (stats.compliance>=50 ? 'Perlu Perhatian' : 'Butuh Tindakan Segera');
+  subEl.textContent = stats.compliance>=80 ? 'Sangat Aman' : (stats.compliance>=50 ? 'Selesai' : 'Butuh Tindakan Segera');
   subEl.className = 'stat-sub ' + (stats.compliance>=80 ? 'ok' : (stats.compliance<50?'bad':''));
 
   var maxVal = Math.max.apply(null, CATEGORY_ORDER.map(function(c){ return stats.categoryCounts[c]||0; }).concat([1]));
