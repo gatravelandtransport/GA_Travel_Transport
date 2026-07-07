@@ -620,7 +620,6 @@ var ARMADA_CONFIG = {
   bus:{
     idField:'id',
     columns:[
-      { key:'no', label:'No' },
       { key:'no_lambung', label:'No Lambung' },
       { key:'jenis_armada', label:'Jenis Armada' },
       { key:'kapasitas', label:'Kapasitas' },
@@ -629,7 +628,6 @@ var ARMADA_CONFIG = {
       { key:'bu', label:'BU (Badan Usaha)' }
     ],
     fields:[
-      { key:'no', label:'No', type:'text', required:true },
       { key:'no_lambung', label:'No Lambung', type:'text', required:true },
       { key:'jenis_armada', label:'Jenis Armada', type:'select', options:['LV','LT','DT','MH','BUS'], required:true },
       { key:'kapasitas', label:'Kapasitas (seat)', type:'number', required:true },
@@ -865,7 +863,7 @@ function readFormValues(fields, prefix){
     if(f.type==='password' && !val){
       // kosongkan password berarti tidak diganti, tidak dikirim sama sekali
     } else if((f.type==='date' || f.type==='number') && !val){
-      payload[f.key] = null; // kosong untuk date/number harus "",
+      payload[f.key] = "";
     } else {
       payload[f.key] = val;
     }
