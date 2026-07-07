@@ -589,6 +589,7 @@ var SESSION_KEY = 'ga_travel_session';
 var DOC_CONFIG = {
   idField:'id',
   columns:[
+    { key:'/dd/mm/yyyy', label:'DD/MM/YYYY' },
     { key:'bu', label:'BU (Badan Usaha)' },
     { key:'kategori', label:'Kategori' },
     { key:'nama_dokumen', label:'Nama Dokumen' },
@@ -601,6 +602,7 @@ var DOC_CONFIG = {
     { key:'keterangan', label:'Keterangan' }
   ],
   fields:[
+    { key:'dd/mm/yyyy', label:'DD/MM/YYYY', type:'date', required:false },
     { key:'bu', label:'BU (Badan Usaha)', type:'select', options:['HJF','KPS','OST','CKM'], required:true },
     { key:'kategori', label:'Kategori', type:'select', options:['IM','General Expens','SPL','SKD','Lain-lain'], required:true },
     { key:'nama_dokumen', label:'Nama Dokumen / Objek', type:'text', required:true },
