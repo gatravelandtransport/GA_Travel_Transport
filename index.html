@@ -863,7 +863,7 @@ function readFormValues(fields, prefix){
     if(f.type==='password' && !val){
       // kosongkan password berarti tidak diganti, tidak dikirim sama sekali
     } else if((f.type==='date' || f.type==='number') && !val){
-      payload[f.key] = "";
+      payload[f.key] = null; // kosong untuk date/number harus ""
     } else {
       payload[f.key] = val;
     }
