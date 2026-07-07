@@ -871,7 +871,7 @@ function readFormValues(fields, prefix){
   return { payload:payload, valid:valid };
 }
 
-/** Urutkan array of objects A-Z (alfanumerik) berdasarkan satu field. */
+/** Urutkan array of objects A-Z/1-100000 (alfanumerik) berdasarkan satu field. */
 function sortByField(arr, field){
   return arr.slice().sort(function(a,b){
     return String(a[field]||'').localeCompare(String(b[field]||''), 'id', { numeric:true, sensitivity:'base' });
