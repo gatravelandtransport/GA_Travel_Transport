@@ -590,28 +590,28 @@ var DOC_CONFIG = {
   idField:'id',
   columns:[
     { key:'dd/mm/yyyy', label:'DD/MM/YYYY' },
-    { key:'bu', label:'BU (Badan Usaha)' },
+    { key:'bu', label:'BU' },
     { key:'kategori', label:'Kategori' },
     { key:'nama_dokumen', label:'Nama Dokumen' },
     { key:'nomor_dokumen', label:'Nomor Dokumen' },
     { key:'tanggal_titip', label:'Tanggal Titip' },
     { key:'penitip', label:'Penitip' },
     { key:'tempat_titip', label:'Tempat Titip' },
-    { key:'tanggal_terima', label:'Tanggal Terima' },
     { key:'penerima', label:'Penerima' },
+    { key:'tanggal_serah_terima', label:'Tanggal Serah Terima' },
     { key:'keterangan', label:'Keterangan' }
   ],
   fields:[
     { key:'dd/mm/yyyy', label:'DD/MM/YYYY', type:'date', required:false },
-    { key:'bu', label:'BU (Badan Usaha)', type:'select', options:['HJF','KPS','OST','CKM'], required:true },
+    { key:'bu', label:'BU', type:'select', options:['HJF','KPS','OST','CKM'], required:true },
     { key:'kategori', label:'Kategori', type:'select', options:['IM','General Expens','SPL','SKD','Lain-lain'], required:true },
     { key:'nama_dokumen', label:'Nama Dokumen / Objek', type:'text', required:true },
     { key:'nomor_dokumen', label:'Nomor Dokumen', type:'text', required:true },
     { key:'tanggal_titip', label:'Tanggal Titip', type:'date', required:true },
     { key:'penitip', label:'Penitip', type:'text', required:true },
     { key:'tempat_titip', label:'Tempat Titip', type:'text', required:true },
-    { key:'tanggal_terima', label:'Tanggal Terima (opsional, isi saat sudah diambil)', type:'date', required:false },
     { key:'penerima', label:'Penerima (opsional, isi saat sudah diambil)', type:'text', required:false },
+    { key:'tanggal_serah_terima', label:'Tanggal Serah Terima (opsional, isi saat sudah diambil)', type:'date', required:false },
     { key:'keterangan', label:'Keterangan (opsional)', type:'text', required:false }
   ]
 };
