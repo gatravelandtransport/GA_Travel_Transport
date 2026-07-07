@@ -1332,7 +1332,7 @@ function deleteMonitoringBusRow(noLambung){
  * Tampilan "Lihat" — meniru gaya tabel jadwal fisik (header dwibahasa,
  * kolom No Lambung & Trip digabung/merge, pewarnaan berselang per grup trip).
  */
-var TRIP_ORDER = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+var TRIP_ORDER = ['Pagi','Pagi','Pagi','Pagi','Pagi','Pagi','Sore','Sore','Sore','Sore','Sore','Sore'];
 function viewMonitoringDetail(noLambung){
   var rows = state.monitoring.filter(function(r){ return String(r.no_lambung)===String(noLambung); });
   rows.sort(function(a,b){ return TRIP_ORDER.indexOf(a.trip) - TRIP_ORDER.indexOf(b.trip); });
