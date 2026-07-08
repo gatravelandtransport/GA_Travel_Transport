@@ -958,7 +958,7 @@ function renderDocTable(){
   html+='</tbody></table>'; wrap.innerHTML=html;
 }
 function getDocStatus(row){
-  if(row.tanggal_terima) return { label:'Sudah Diambil', cls:'status-aktif' };
+  if(row.tanggal_serah_terima) return { label:'Sudah Diambil', cls:'status-aktif' };
   return { label:'Belum Diambil', cls:'status-lain' };
 }
 function openDocForm(id){
