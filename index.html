@@ -230,7 +230,7 @@
         <div class="ver">ARSIP DIGITAL V2.0</div>
       </div>
     </div>
-    <h1>Masuk ke Terminal Dispatch</h1>
+    <h1>Masuk Ke GAT HJF, KPS, OST, CKM</h1>
     <div class="sub">Silakan masuk menggunakan akun yang terdaftar.</div>
     <div class="login-error" id="loginError"></div>
     <form id="loginForm">
@@ -244,7 +244,7 @@
       </div>
       <button type="submit" class="login-btn" id="loginBtn">Masuk</button>
     </form>
-    <div class="login-hint">Belum punya akun admin? <a href="#" id="createAdminLink" style="color:var(--accent);font-weight:700;">Klik di sini untuk membuat akun admin default</a> (username: admin, password: admin123 — hanya berfungsi sekali saat tabel pengguna masih kosong).</div>
+    <div class="login-hint"><a href="#" id="createAdminLink" style="color:var(--accent);font-weight:700;"></a></div>
   </div>
 </div>
 
@@ -294,8 +294,8 @@
       <div class="view active" id="view-dashboard">
         <div class="banner">
           <div>
-            <h2>Selamat Datang di Terminal Arsip GA Travel & Transport 🚛</h2>
-            <p>Pusat monitoring izin trayek, kelaikan KIR, kepatuhan STNK armada, serta keabsahan SIM pengemudi aktif secara real-time.</p>
+            <h2>Selamat Datang Di Bank Arsip GA Travel & Transport 🚛</h2>
+            <p>Pusat monitoring berkas, armada, driver, serta peralatan secara real-time.</p>
           </div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;">
             <button class="btn" onclick="switchView('arsip')">Lihat Arsip Dokumen ↗</button>
@@ -344,10 +344,10 @@
           <input type="text" class="search-input" id="searchArsip" placeholder="Cari nomor dokumen, kategori, atau nama...">
           <select class="search-input" style="flex:0 0 170px;" id="filterArsipKategori">
             <option value="">Semua Kategori</option>
-            <option value="KIR">KIR</option>
-            <option value="Izin Trayek">Izin Trayek</option>
-            <option value="STNK">STNK</option>
-            <option value="SIM Driver">SIM Driver</option>
+            <option value="IM">IM</option>
+            <option value="General Expens">General Expens</option>
+            <option value="SPL">SPL</option>
+            <option value="SKD">SKD</option>
             <option value="Lain-lain">Lain-lain</option>
           </select>
           <select class="search-input" style="flex:0 0 170px;" id="filterArsipStatus">
@@ -589,25 +589,27 @@ var SESSION_KEY = 'ga_travel_session';
 var DOC_CONFIG = {
   idField:'id',
   columns:[
+    { key:'bu', label:'BU' },
     { key:'kategori', label:'Kategori' },
     { key:'nama_dokumen', label:'Nama Dokumen' },
     { key:'nomor_dokumen', label:'Nomor Dokumen' },
     { key:'tanggal_titip', label:'Tanggal Titip' },
     { key:'penitip', label:'Penitip' },
     { key:'tempat_titip', label:'Tempat Titip' },
-    { key:'tanggal_terima', label:'Tanggal Terima' },
     { key:'penerima', label:'Penerima' },
+    { key:'tanggal_serah_terima', label:'Tanggal Serah Terima' },
     { key:'keterangan', label:'Keterangan' }
   ],
   fields:[
-    { key:'kategori', label:'Kategori', type:'select', options:['KIR','Izin Trayek','STNK','SIM Driver','Lain-lain'], required:true },
+    { key:'bu', label:'BU', type:'select', options:['HJF','KPS','OST','CKM'], required:true },
+    { key:'kategori', label:'Kategori', type:'select', options:['IM','General Expens','SPL','SKD','Lain-lain'], required:true },
     { key:'nama_dokumen', label:'Nama Dokumen / Objek', type:'text', required:true },
     { key:'nomor_dokumen', label:'Nomor Dokumen', type:'text', required:true },
     { key:'tanggal_titip', label:'Tanggal Titip', type:'date', required:true },
     { key:'penitip', label:'Penitip', type:'text', required:true },
     { key:'tempat_titip', label:'Tempat Titip', type:'text', required:true },
-    { key:'tanggal_terima', label:'Tanggal Terima (opsional, isi saat sudah diambil)', type:'date', required:false },
     { key:'penerima', label:'Penerima (opsional, isi saat sudah diambil)', type:'text', required:false },
+    { key:'tanggal_serah_terima', label:'Tanggal Serah Terima (opsional, isi saat sudah diambil)', type:'date', required:false },
     { key:'keterangan', label:'Keterangan (opsional)', type:'text', required:false }
   ]
 };
@@ -616,15 +618,17 @@ var ARMADA_CONFIG = {
   bus:{
     idField:'id',
     columns:[
-      { key:'no_armada', label:'No Armada' },
+      { key:'bu', label:'BU (Badan Usaha)' },
+      { key:'no_lambung', label:'No Lambung' },
       { key:'jenis_armada', label:'Jenis Armada' },
       { key:'kapasitas', label:'Kapasitas' },
       { key:'tanggal_commissioning', label:'Commissioning' },
       { key:'status', label:'Status' }
     ],
     fields:[
-      { key:'no_armada', label:'No Armada', type:'text', required:true },
-      { key:'jenis_armada', label:'Jenis Armada', type:'text', required:true },
+      { key:'bu', label:'BU (Badan Usaha)', type:'select', options:['HJF','KPS','OST','CKM'], required:true },
+      { key:'no_lambung', label:'No Lambung', type:'text', required:true },
+      { key:'jenis_armada', label:'Jenis Armada', type:'select', options:['LV','LT','DT','MH','BUS'], required:true },
       { key:'kapasitas', label:'Kapasitas (seat)', type:'number', required:true },
       { key:'tanggal_commissioning', label:'Tanggal Commissioning', type:'date', required:false },
       { key:'status', label:'Status', type:'select', options:['Aktif','Standby','Breakdown'], required:true }
@@ -635,14 +639,18 @@ var ARMADA_CONFIG = {
   driver:{
     idField:'id',
     columns:[
+      { key:'bu', label:'BU (Badan Usaha)' },
       { key:'nama', label:'Nama' },
-      { key:'no_sim', label:'No SIM' },
+      { key:'kimper', label:'Kimper' },
+      { key:'tgl_expired_kimper', label:'Tgl_Expired_Kimper' },
       { key:'no_hp', label:'No HP' },
       { key:'status', label:'Status' }
     ],
     fields:[
+      { key:'bu', label:'BU (Badan Usaha)', type:'select', options:['HJF','KPS','OST','CKM'], required:true },
       { key:'nama', label:'Nama Lengkap', type:'text', required:true },
-      { key:'no_sim', label:'Nomor SIM', type:'text', required:true },
+      { key:'kimper', label:'Kimper', type:'text', required:true },
+      { key:'tgl_expired_kimper', label:'Tgl_Expired_Kimper', type:'date', required:false },
       { key:'no_hp', label:'Nomor HP', type:'text', required:true },
       { key:'status', label:'Status', type:'select', options:['Permanent','Kontrak','Orientasi'], required:true }
     ],
@@ -693,8 +701,8 @@ var USER_CONFIG = {
   ]
 };
 
-var CATEGORY_ORDER = ['KIR','Izin Trayek','STNK','SIM Driver','Lain-lain'];
-var CATEGORY_COLORS = { 'KIR':'#f59e0b','Izin Trayek':'#3b82f6','STNK':'#f59e0b','SIM Driver':'#3b82f6','Lain-lain':'#f59e0b' };
+var CATEGORY_ORDER = ['IM','General Expens','SPL','SKD','Lain-lain'];
+var CATEGORY_COLORS = { 'IM':'#f59e0b','General Expens':'#3b82f6','SPL':'#f59e0b','SKD':'#3b82f6','Lain-lain':'#f59e0b' };
 
 var MONITORING_ROUTES = ['Reguler','Pos Merah','Ecovillage'];
 var MONITORING_CONFIG = {
@@ -887,7 +895,7 @@ function renderDashboard(stats){
   document.getElementById('statDriversSub').textContent = stats.driverPermanent+' Permanent • '+stats.driverKontrak+' Kontrak • '+stats.driverOrientasi+' Orientasi';
   document.getElementById('statCompliance').textContent = stats.compliance+'%';
   var subEl = document.getElementById('statComplianceSub');
-  subEl.textContent = stats.compliance>=80 ? 'Sangat Aman' : (stats.compliance>=50 ? 'Perlu Perhatian' : 'Butuh Tindakan Segera');
+  subEl.textContent = stats.compliance>=80 ? 'Sangat Aman' : (stats.compliance>=50 ? 'Selesai' : 'Butuh Tindakan Segera');
   subEl.className = 'stat-sub ' + (stats.compliance>=80 ? 'ok' : (stats.compliance<50?'bad':''));
 
   var maxVal = Math.max.apply(null, CATEGORY_ORDER.map(function(c){ return stats.categoryCounts[c]||0; }).concat([1]));
