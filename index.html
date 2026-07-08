@@ -895,7 +895,7 @@ function renderDashboard(stats){
   document.getElementById('statDriversSub').textContent = stats.driverPermanent+' Permanent • '+stats.driverKontrak+' Kontrak • '+stats.driverOrientasi+' Orientasi';
   document.getElementById('statCompliance').textContent = stats.compliance+'%';
   var subEl = document.getElementById('statComplianceSub');
-  subEl.textContent = stats.compliance>=80 ? 'Sangat Aman' : (stats.compliance>=50 ? 'Selesai' : 'Butuh Tindakan Segera');
+  subEl.textContent = stats.compliance>=80 ? 'Sangat Aman' : (stats.compliance>=50 ? 'Full Approve' : 'Proses Approval');
   subEl.className = 'stat-sub ' + (stats.compliance>=80 ? 'ok' : (stats.compliance<50?'bad':''));
 
   var maxVal = Math.max.apply(null, CATEGORY_ORDER.map(function(c){ return stats.categoryCounts[c]||0; }).concat([1]));
@@ -938,8 +938,8 @@ function filteredDocs(){
   var rows = state.docs.filter(function(r){
     if(q && !DOC_CONFIG.columns.some(function(c){ return String(r[c.key]||'').toLowerCase().indexOf(q)!==-1; })) return false;
     if(kategori && r.kategori!==kategori) return false;
-    if(status==='belum' && r.tanggal_terima) return false;
-    if(status==='sudah' && !r.tanggal_terima) return false;
+    if(status==='belum' && r.tanggal_serah_terima) return false;
+    if(status==='sudah' && !r.tanggal_serah_terima) return false;
     return true;
   });
   return sortByField(rows, 'tanggal_titip');
