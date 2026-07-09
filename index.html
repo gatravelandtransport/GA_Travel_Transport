@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Terminal Arsip GA Travel & Transport</title>
+<title>Terminal Bank Arsip GA Travel & Transport</title>
 <style>
   :root{
     --sidebar:#0b1220;
@@ -281,7 +281,7 @@
 
   <div class="main">
     <div class="topbar">
-      <div class="crumb">TERMINAL DISPATCH <span class="dot">•</span> <b id="crumbTitle">DASHBOARD UTAMA</b></div>
+      <div class="crumb">TERMINAL GAT HJF, KPS, OST, CKM <span class="dot">•</span> <b id="crumbTitle">DASHBOARD UTAMA</b></div>
       <div class="topbar-right">
         <div class="pill"><span class="dot-live"></span> Sesi Dispatcher Aktif</div>
         <div class="pill" id="clockPill">🕐 --:--:--</div>
@@ -895,7 +895,7 @@ function renderDashboard(stats){
   document.getElementById('statDriversSub').textContent = stats.driverPermanent+' Permanent • '+stats.driverKontrak+' Kontrak • '+stats.driverOrientasi+' Orientasi';
   document.getElementById('statCompliance').textContent = stats.compliance+'%';
   var subEl = document.getElementById('statComplianceSub');
-  subEl.textContent = stats.compliance>=80 ? 'Sangat Aman' : (stats.compliance>=50 ? 'Full Approve' : 'Proses Approval');
+  subEl.textContent = stats.compliance>=80 ? 'Sangat Aman' : (stats.compliance>=50 ? 'Perlu Perhatian' : 'Butuh Tindakan Segera');
   subEl.className = 'stat-sub ' + (stats.compliance>=80 ? 'ok' : (stats.compliance<50?'bad':''));
 
   var maxVal = Math.max.apply(null, CATEGORY_ORDER.map(function(c){ return stats.categoryCounts[c]||0; }).concat([1]));
