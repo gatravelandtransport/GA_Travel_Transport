@@ -402,9 +402,9 @@
           <input type="text" class="search-input" id="searchPengguna" placeholder="Cari username atau nama...">
           <select class="search-input" style="flex:0 0 150px;" id="filterUserRole">
             <option value="">Semua Role</option>
+            <option value="Staff">Staff</option>
             <option value="Admin">Admin</option>
-            <option value="Dispatcher">Dispatcher</option>
-            <option value="Sopir">Sopir</option>
+            <option value="Driver">Driver</option>
           </select>
           <select class="search-input" style="flex:0 0 150px;" id="filterUserStatus">
             <option value="">Semua Status</option>
@@ -696,7 +696,7 @@ var USER_CONFIG = {
     { key:'username', label:'Username', type:'text', required:true },
     { key:'password', label:'Password', type:'password', required:false },
     { key:'nama', label:'Nama Lengkap', type:'text', required:true },
-    { key:'role', label:'Role', type:'select', options:['Admin','Dispatcher','Sopir'], required:true },
+    { key:'role', label:'Role', type:'select', options:['Staff','Admin','Driver'], required:true },
     { key:'status', label:'Status', type:'select', options:['Aktif','Non-Aktif'], required:true }
   ]
 };
