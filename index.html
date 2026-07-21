@@ -957,7 +957,7 @@ function renderDocTable(){
     DOC_CONFIG.columns.forEach(function(c){
       var val = (r[c.key]!==undefined && r[c.key]!==null) ? r[c.key] : '';
       if(c.key==='nama_dokumen'){
-        html+='<td>'+val+(r.tracking_status?'<div style="font-size:7.5px;color:var(--muted);margin-top:2px;">📍 '+r.tracking_status+'</div>':'')+'</td>';
+        html+='<td>'+val+(r.tracking_status?'<div style="font-size:9.5px;color:var(--muted);margin-top:2px;">📍 '+r.tracking_status+'</div>':'')+'</td>';
       } else {
         html+='<td>'+val+'</td>';
       }
