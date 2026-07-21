@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terminal Arsip GA Travel & Transport</title>
+<style>
+  :root{
+    --sidebar:#0b1220;
+    --sidebar-border:#1e293b;
+    --sidebar-text:#94a3b8;
+    --accent:#f59e0b;
+    --accent-dark:#d97706;
+    --bg:#f5f6fa;
+    --card:#ffffff;
+    --border:#e5e7eb;
+    --text:#111827;
+    --muted:#6b7280;
+    --danger:#ef4444;
+    --danger-bg:#fef2f2;
+    --warn:#f59e0b;
+    --warn-bg:#fffbeb;
+    --ok:#16a34a;
+    --ok-bg:#f0fdf4;
+    --blue:#3b82f6;
+    --violet:#8b5cf6;
+    --violet-bg:#f5f3ff;
+    --blue-bg:#eff6ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);}
+
+  /* ---------- LOGIN SCREEN ---------- */
+  #loginScreen{
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 20% 20%,#1e1b4b,transparent 45%),
+               radial-gradient(circle at 80% 80%,#3b2a06,transparent 45%),
+               var(--sidebar);
+    padding:20px;
+  }
+  .login-card{
+    background:#101a2c;border:1px solid var(--sidebar-border);border-radius:16px;
+    padding:36px 32px;width:100%;max-width:380px;color:#fff;
+  }
+  .login-brand{display:flex;align-items:center;gap:12px;margin-bottom:26px;}
+  .login-brand .brand-icon{width:44px;height:44px;border-radius:12px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:20px;}
+  .login-brand .name{font-weight:800;font-size:14px;letter-spacing:0.02em;line-height:1.3;}
+  .login-brand .ver{font-size:10px;color:#64748b;letter-spacing:0.05em;}
+  .login-card h1{font-size:18px;margin-bottom:6px;}
+  .login-card .sub{font-size:12.5px;color:#94a3b8;margin-bottom:22px;}
+  .login-field{margin-bottom:14px;}
+  .login-field label{display:block;font-size:11.5px;color:#94a3b8;font-weight:600;margin-bottom:6px;}
+  .login-field input{
+    width:100%;background:#0b1220;border:1px solid var(--sidebar-border);color:#fff;
+    padding:11px 13px;border-radius:8px;font-size:13.5px;
+  }
+  .login-field input:focus{outline:none;border-color:var(--accent);}
+  .login-error{background:var(--danger-bg);color:var(--danger);font-size:12px;padding:9px 12px;border-radius:8px;margin-bottom:14px;display:none;}
+  .login-error.show{display:block;}
+  .login-btn{
+    width:100%;background:var(--accent);color:#1e1b16;border:none;padding:12px;border-radius:8px;
+    font-weight:800;font-size:13.5px;cursor:pointer;margin-top:8px;
+  }
+  .login-btn:hover{background:var(--accent-dark);}
+  .login-btn:disabled{opacity:0.6;cursor:default;}
+  .login-hint{margin-top:18px;font-size:11px;color:#64748b;line-height:1.5;text-align:center;}
+
+  /* ---------- APP LAYOUT ---------- */
+  #appRoot{display:none;}
+  .app{display:flex;min-height:100vh;}
+
+  .sidebar{width:250px;flex-shrink:0;background:var(--sidebar);display:flex;flex-direction:column;color:var(--sidebar-text);}
+  .brand{display:flex;align-items:center;gap:12px;padding:20px;border-bottom:1px solid var(--sidebar-border);}
+  .brand-icon{width:38px;height:38px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .brand-text .name{color:#fff;font-weight:700;font-size:13px;letter-spacing:0.02em;line-height:1.3;}
+  .brand-text .ver{font-size:10px;color:#64748b;letter-spacing:0.05em;}
+
+  .user-box{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--sidebar-border);}
+  .avatar{width:34px;height:34px;border-radius:50%;background:#4c1d95;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700;flex-shrink:0;}
+  .user-meta{flex:1;min-width:0;}
+  .user-name{color:#fff;font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .user-role{display:inline-block;margin-top:2px;background:rgba(245,158,11,0.15);color:var(--accent);font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;letter-spacing:0.04em;}
+  .logout-btn{background:none;border:none;color:#64748b;cursor:pointer;font-size:14px;padding:4px;flex-shrink:0;}
+  .logout-btn:hover{color:#fff;}
+
+  .menu{flex:1;padding:12px 10px;}
+  .menu-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:8px;font-size:12.5px;font-weight:600;letter-spacing:0.02em;cursor:pointer;margin-bottom:2px;color:var(--sidebar-text);transition:all .15s ease;}
+  .menu-item .ic{width:18px;text-align:center;font-size:14px;}
+  .menu-item:hover{background:rgba(255,255,255,0.05);color:#fff;}
+  .menu-item.active{background:var(--accent);color:#1e1b16;}
+  .menu-item.hidden-role{display:none;}
+
+  .main{flex:1;min-width:0;display:flex;flex-direction:column;}
+  .topbar{display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1px solid var(--border);padding:16px 28px;flex-wrap:wrap;gap:10px;}
+  .crumb{font-size:11px;font-weight:700;letter-spacing:0.08em;color:var(--muted);}
+  .crumb b{color:var(--text);}
+  .crumb .dot{color:var(--accent);margin:0 6px;}
+  .topbar-right{display:flex;align-items:center;gap:10px;}
+  .pill{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:7px 12px;border-radius:20px;border:1px solid var(--border);color:var(--muted);}
+  .pill .dot-live{width:7px;height:7px;border-radius:50%;background:var(--ok);}
+
+  .content{padding:24px 28px;overflow-y:auto;}
+
+  .banner{background:linear-gradient(120deg,#0b1220,#1e1b4b 130%);border-radius:14px;padding:26px 28px;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:20px;}
+  .banner h2{font-size:19px;font-weight:700;margin-bottom:6px;}
+  .banner p{font-size:13px;color:#cbd5e1;max-width:560px;line-height:1.5;}
+
+  .btn{background:var(--accent);color:#1e1b16;border:none;padding:10px 18px;border-radius:8px;font-weight:700;font-size:12.5px;cursor:pointer;transition:background .15s ease;}
+  .btn:hover{background:var(--accent-dark);}
+  .btn.secondary{background:#fff;color:var(--text);border:1px solid var(--border);}
+  .btn.secondary:hover{background:#f9fafb;}
+  .btn.danger{background:var(--danger);color:#fff;}
+  .btn:disabled{opacity:0.6;cursor:default;}
+
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;}
+  .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;}
+  .stat-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+  .stat-label{font-size:10.5px;font-weight:700;letter-spacing:0.06em;color:var(--muted);}
+  .stat-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+  .stat-value{font-size:26px;font-weight:800;margin-bottom:4px;}
+  .stat-sub{font-size:11.5px;color:var(--muted);}
+  .stat-sub.ok{color:var(--ok);}
+  .stat-sub.bad{color:var(--danger);}
+
+  .grid-2{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-bottom:20px;align-items:start;}
+  .panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+  .panel-title{font-size:12.5px;font-weight:800;letter-spacing:0.04em;}
+  .badge{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--danger-bg);color:var(--danger);}
+
+  .chart-wrap{display:flex;align-items:flex-end;gap:22px;height:200px;padding-top:10px;border-top:1px solid var(--border);border-left:1px solid var(--border);padding-left:16px;}
+  .chart-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:8px;}
+  .chart-bar{width:34px;border-radius:5px 5px 0 0;transition:height .4s ease;}
+  .chart-col-label{font-size:10.5px;color:var(--muted);font-weight:600;}
+
+  .alert-item{border-left:3px solid var(--danger);background:var(--danger-bg);border-radius:8px;padding:10px 12px;margin-bottom:10px;}
+  .alert-item.warn{border-left-color:var(--warn);background:var(--warn-bg);}
+  .alert-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+  .alert-tag{font-size:9.5px;font-weight:800;letter-spacing:0.05em;color:var(--danger);}
+  .alert-item.warn .alert-tag{color:var(--accent-dark);}
+  .alert-date{font-size:10px;color:var(--muted);}
+  .alert-name{font-size:12.5px;font-weight:700;}
+  .alert-sub{font-size:11px;color:var(--muted);}
+  .empty-mini{font-size:12px;color:var(--muted);padding:20px 0;text-align:center;}
+
+  .toolbar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+  .search-input{flex:1;min-width:200px;background:#fff;border:1px solid var(--border);padding:10px 14px;border-radius:8px;font-size:13px;}
+  .search-input:focus{outline:none;border-color:var(--accent);}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  thead th{text-align:left;padding:11px 14px;background:#f9fafb;color:var(--muted);font-weight:700;font-size:10.5px;letter-spacing:0.04em;border-bottom:1px solid var(--border);white-space:nowrap;}
+  tbody td{padding:11px 14px;border-bottom:1px solid var(--border);white-space:nowrap;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#fafafa;}
+  .status-chip{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;}
+  .status-aktif{background:var(--ok-bg);color:var(--ok);}
+  .status-nonaktif{background:var(--danger-bg);color:var(--danger);}
+  .status-lain{background:var(--warn-bg);color:var(--accent-dark);}
+  .actions-cell{display:flex;gap:6px;}
+  .icon-btn{background:#fff;border:1px solid var(--border);color:var(--muted);padding:5px 9px;border-radius:6px;cursor:pointer;font-size:11px;}
+  .icon-btn:hover{color:var(--text);border-color:var(--accent);}
+  .empty-state{padding:44px;text-align:center;color:var(--muted);font-size:13px;}
+
+  .subtabs{display:flex;gap:8px;margin-bottom:16px;}
+  .subtab{padding:9px 16px;border-radius:8px;font-size:12.5px;font-weight:700;cursor:pointer;background:#fff;border:1px solid var(--border);color:var(--muted);}
+  .subtab.active{background:var(--sidebar);color:#fff;border-color:var(--sidebar);}
+
+  /* ---------- STOCK CARDS (Inventaris) ---------- */
+  .stock-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-bottom:20px;}
+  .stock-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;}
+  .stock-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+  .stock-ic{width:34px;height:34px;border-radius:9px;background:var(--violet-bg);color:var(--violet);display:flex;align-items:center;justify-content:center;font-size:16px;}
+  .stock-name{font-size:12.5px;font-weight:700;margin-bottom:2px;}
+  .stock-cat{font-size:10.5px;color:var(--muted);margin-bottom:10px;}
+  .stock-qty{font-size:22px;font-weight:800;}
+  .stock-unit{font-size:11px;color:var(--muted);font-weight:600;}
+
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;}
+  .overlay.show{display:flex;}
+  .modal{background:#fff;border-radius:12px;width:100%;max-width:440px;padding:24px;max-height:88vh;overflow-y:auto;}
+  .modal.wide{max-width:1180px;}
+  .trip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+  .trip-block{border:1px solid var(--border);border-radius:8px;padding:10px;}
+  .trip-block .trip-title{font-weight:700;font-size:11.5px;margin-bottom:8px;}
+  .trip-field{margin-bottom:6px;}
+  .trip-field:last-child{margin-bottom:0;}
+  .trip-field label{display:block;font-size:9.5px;color:var(--muted);margin-bottom:3px;font-weight:600;}
+  .trip-field input{width:100%;padding:6px 8px;font-size:11.5px;border:1px solid var(--border);border-radius:6px;}
+  .trip-field input:focus{outline:none;border-color:var(--accent);}
+  .trip-grid.cols-3{grid-template-columns:repeat(3,1fr);}
+  @media (max-width:1100px){ .trip-grid{grid-template-columns:repeat(2,1fr);} .trip-grid.cols-3{grid-template-columns:repeat(2,1fr);} }
+  .modal h2{font-size:16px;margin-bottom:16px;}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:11.5px;color:var(--muted);font-weight:600;margin-bottom:6px;}
+  .field input,.field select{width:100%;background:#fff;border:1px solid var(--border);padding:10px 12px;border-radius:8px;font-size:13px;}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--accent);}
+  .field .hint{font-size:10.5px;color:var(--muted);margin-top:4px;}
+  .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;}
+
+  .placeholder-panel{background:var(--card);border:1px dashed var(--border);border-radius:12px;padding:60px 20px;text-align:center;color:var(--muted);}
+  .placeholder-panel .ic{font-size:34px;margin-bottom:12px;}
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--sidebar);color:#fff;padding:12px 18px;border-radius:8px;font-size:13px;opacity:0;transform:translateY(10px);transition:all .25s ease;z-index:200;max-width:320px;}
+  .toast.show{opacity:1;transform:translateY(0);}
+  .toast.error{background:var(--danger);}
+  .loader{width:30px;height:30px;border:3px solid var(--accent);border-bottom-color:transparent;border-radius:50%;animation:spin .8s linear infinite;margin:50px auto;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .view{display:none;}
+  .view.active{display:block;}
+
+  @media (max-width:900px){ .stats-grid{grid-template-columns:repeat(2,1fr);} .grid-2{grid-template-columns:1fr;} }
+  @media (max-width:640px){
+    .app{flex-direction:column;}
+    .sidebar{width:100%;flex-direction:row;overflow-x:auto;align-items:center;}
+    .brand,.user-box{display:none;}
+    .menu{display:flex;padding:8px;}
+    .menu-item{white-space:nowrap;}
+    .stats-grid{grid-template-columns:1fr 1fr;}
+    .content{padding:16px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN SCREEN ============ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="brand-icon">🚌</div>
+      <div>
+        <div class="name">GA TRAVEL & TRANSPORT</div>
+        <div class="ver">ARSIP DIGITAL V2.0</div>
+      </div>
+    </div>
+    <h1>Masuk ke Terminal Dispatch</h1>
+    <div class="sub">Silakan masuk menggunakan akun yang terdaftar.</div>
+    <div class="login-error" id="loginError"></div>
+    <form id="loginForm">
+      <div class="login-field">
+        <label>Username</label>
+        <input type="text" id="loginUsername" autocomplete="username" required>
+      </div>
+      <div class="login-field">
+        <label>Password</label>
+        <input type="password" id="loginPassword" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="login-btn" id="loginBtn">Masuk</button>
+    </form>
+    <div class="login-hint">Belum punya akun admin? <a href="#" id="createAdminLink" style="color:var(--accent);font-weight:700;">Klik di sini untuk membuat akun admin default</a> (username: admin, password: admin123 — hanya berfungsi sekali saat tabel pengguna masih kosong).</div>
+  </div>
+</div>
+
+<!-- ============ APP ROOT ============ -->
+<div id="appRoot">
+<div class="app">
+
+  <div class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">🚌</div>
+      <div class="brand-text">
+        <div class="name">GA TRAVEL &<br>TRANSPORT</div>
+        <div class="ver">ARSIP DIGITAL V2.0</div>
+      </div>
+    </div>
+    <div class="user-box">
+      <div class="avatar" id="userAvatar">D</div>
+      <div class="user-meta">
+        <div class="user-name" id="userNameLabel">Dispatcher</div>
+        <div class="user-role" id="userRoleLabel">ROLE</div>
+      </div>
+      <button class="logout-btn" id="logoutBtn" title="Keluar">⏻</button>
+    </div>
+    <div class="menu">
+      <div class="menu-item active" data-view="dashboard"><span class="ic">▦</span> DASHBOARD UTAMA</div>
+      <div class="menu-item" data-view="arsip"><span class="ic">📁</span> ARSIP DIGITAL</div>
+      <div class="menu-item" data-view="armada"><span class="ic">🚍</span> ARMADA & SOPIR</div>
+      <div class="menu-item" data-view="inventaris"><span class="ic">📦</span> INVENTARIS & STOK</div>
+      <div class="menu-item" data-view="pengguna" id="menuPengguna"><span class="ic">👤</span> KELOLA PENGGUNA</div>
+      <div class="menu-item" data-view="monitoring"><span class="ic">🛰️</span> MONITORING ARMADA</div>
+      <div class="menu-item" data-view="riwayat"><span class="ic">📊</span> RIWAYAT AKTIVITAS</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="crumb">TERMINAL DISPATCH <span class="dot">•</span> <b id="crumbTitle">DASHBOARD UTAMA</b></div>
+      <div class="topbar-right">
+        <div class="pill"><span class="dot-live"></span> Sesi Dispatcher Aktif</div>
+        <div class="pill" id="clockPill">🕐 --:--:--</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ============ DASHBOARD ============ -->
+      <div class="view active" id="view-dashboard">
+        <div class="banner">
+          <div>
+            <h2>Selamat Datang di Terminal Arsip GA Travel & Transport 🚛</h2>
+            <p>Pusat monitoring izin trayek, kelaikan KIR, kepatuhan STNK armada, serta keabsahan SIM pengemudi aktif secara real-time.</p>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn" onclick="switchView('arsip')">Lihat Arsip Dokumen ↗</button>
+            <button class="btn secondary" onclick="downloadDashboardReport()">⬇ Download Ringkasan</button>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-top"><div class="stat-label">TOTAL ARSIP DIGITAL</div><div class="stat-icon" style="background:var(--violet-bg);color:var(--violet);">📄</div></div>
+            <div class="stat-value" id="statDocs">–</div>
+            <div class="stat-sub ok" id="statDocsSub">Tersimpan aman</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top"><div class="stat-label">ARMADA TERDAFTAR</div><div class="stat-icon" style="background:var(--warn-bg);color:var(--accent-dark);">🚌</div></div>
+            <div class="stat-value" id="statBuses">–</div>
+            <div class="stat-sub" id="statBusesSub">– Aktif</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top"><div class="stat-label">PENGEMUDI AKTIF</div><div class="stat-icon" style="background:var(--ok-bg);color:var(--ok);">👥</div></div>
+            <div class="stat-value" id="statDrivers">–</div>
+            <div class="stat-sub" id="statDriversSub">– Siap Jalan</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top"><div class="stat-label">DOKUMEN SUDAH DIAMBIL</div><div class="stat-icon" style="background:var(--ok-bg);color:var(--ok);">🛡️</div></div>
+            <div class="stat-value" id="statCompliance">–</div>
+            <div class="stat-sub ok" id="statComplianceSub">Dihitung dari status pengambilan dokumen</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title">DISTRIBUSI DOKUMEN BERDASARKAN KATEGORI</div></div>
+            <div class="chart-wrap" id="chartWrap"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title">DOKUMEN BELUM DIAMBIL</div><div class="badge" id="alertBadge">0 Dokumen</div></div>
+            <div id="alertList"><div class="empty-mini">Memuat data...</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ ARSIP DIGITAL ============ -->
+      <div class="view" id="view-arsip">
+        <div class="toolbar">
+          <input type="text" class="search-input" id="searchArsip" placeholder="Cari nomor dokumen, kategori, atau nama...">
+          <select class="search-input" style="flex:0 0 170px;" id="filterArsipKategori">
+            <option value="">Semua Kategori</option>
+            <option value="KIR">KIR</option>
+            <option value="Izin Trayek">Izin Trayek</option>
+            <option value="STNK">STNK</option>
+            <option value="SIM Driver">SIM Driver</option>
+            <option value="Lain-lain">Lain-lain</option>
+          </select>
+          <select class="search-input" style="flex:0 0 170px;" id="filterArsipStatus">
+            <option value="">Semua Status</option>
+            <option value="belum">Belum Diambil</option>
+            <option value="sudah">Sudah Diambil</option>
+          </select>
+          <button class="btn secondary" onclick="loadDocuments()">⟳ Muat Ulang</button>
+          <button class="btn secondary" onclick="downloadDocReport()">⬇ Download Laporan</button>
+          <button class="btn" onclick="openDocForm(null)">+ Tambah Dokumen</button>
+        </div>
+        <div class="panel" style="padding:0;"><div id="docTableWrapper"><div class="loader"></div></div></div>
+      </div>
+
+      <!-- ============ ARMADA & SOPIR ============ -->
+      <div class="view" id="view-armada">
+        <div class="subtabs">
+          <div class="subtab active" data-armadatab="bus">🚌 Armada Bus</div>
+          <div class="subtab" data-armadatab="driver">🧑‍✈️ Sopir</div>
+        </div>
+        <div class="toolbar">
+          <input type="text" class="search-input" id="searchArmada" placeholder="Cari data...">
+          <select class="search-input" style="flex:0 0 170px;" id="filterArmadaStatus">
+            <option value="">Semua Status</option>
+          </select>
+          <button class="btn secondary" onclick="loadArmada()">⟳ Muat Ulang</button>
+          <button class="btn secondary" onclick="downloadArmadaReport()">⬇ Download Laporan</button>
+          <button class="btn" id="addArmadaBtn">+ Tambah Data</button>
+        </div>
+        <div class="panel" style="padding:0;"><div id="armadaTableWrapper"><div class="loader"></div></div></div>
+      </div>
+
+      <!-- ============ INVENTARIS & STOK ============ -->
+      <div class="view" id="view-inventaris">
+        <div class="toolbar">
+          <input type="text" class="search-input" id="searchInventaris" placeholder="Cari nama barang atau kategori...">
+          <select class="search-input" style="flex:0 0 170px;" id="filterInvStatus">
+            <option value="">Semua Status Stok</option>
+            <option value="Tersedia">Tersedia</option>
+            <option value="Habis">Habis</option>
+          </select>
+          <button class="btn secondary" onclick="loadInventaris()">⟳ Muat Ulang</button>
+          <button class="btn secondary" onclick="downloadInvReport()">⬇ Download Laporan</button>
+          <button class="btn" onclick="openInvForm(null)">+ Tambah Barang</button>
+        </div>
+        <div class="panel" style="padding:0;"><div id="invTableWrapper"><div class="loader"></div></div></div>
+      </div>
+
+      <!-- ============ KELOLA PENGGUNA ============ -->
+      <div class="view" id="view-pengguna">
+        <div class="toolbar">
+          <input type="text" class="search-input" id="searchPengguna" placeholder="Cari username atau nama...">
+          <select class="search-input" style="flex:0 0 150px;" id="filterUserRole">
+            <option value="">Semua Role</option>
+            <option value="Admin">Admin</option>
+            <option value="Dispatcher">Dispatcher</option>
+            <option value="Sopir">Sopir</option>
+          </select>
+          <select class="search-input" style="flex:0 0 150px;" id="filterUserStatus">
+            <option value="">Semua Status</option>
+            <option value="Aktif">Aktif</option>
+            <option value="Non-Aktif">Non-Aktif</option>
+          </select>
+          <button class="btn secondary" onclick="loadUsers()">⟳ Muat Ulang</button>
+          <button class="btn secondary" onclick="downloadUserReport()">⬇ Download Laporan</button>
+          <button class="btn" onclick="openUserForm(null)">+ Tambah Pengguna</button>
+        </div>
+        <div class="panel" style="padding:0;"><div id="userTableWrapper"><div class="loader"></div></div></div>
+      </div>
+
+      <!-- ============ MONITORING ARMADA ============ -->
+      <div class="view" id="view-monitoring">
+        <div class="subtabs">
+          <div class="subtab active" data-rute="Reguler">Rute Reguler</div>
+          <div class="subtab" data-rute="Pos Merah">Rute Pos Merah</div>
+          <div class="subtab" data-rute="Ecovillage">Rute Ecovillage</div>
+        </div>
+        <div class="toolbar">
+          <input type="text" class="search-input" id="searchMonitoring" placeholder="Cari No Lambung atau Trip...">
+          <button class="btn secondary" onclick="loadMonitoring()">⟳ Muat Ulang</button>
+          <button class="btn secondary" onclick="downloadMonitoringReport()">⬇ Download Laporan</button>
+          <button class="btn" onclick="openMonitoringForm(null)">+ Tambah Jadwal</button>
+        </div>
+        <div class="panel" style="padding:0;"><div id="monitoringTableWrapper"><div class="loader"></div></div></div>
+      </div>
+
+      <!-- ============ PLACEHOLDER ============ -->
+      <div class="view" id="view-riwayat">
+        <div class="placeholder-panel"><div class="ic">📊</div><b>Riwayat Aktivitas</b><br>Modul ini belum dibangun — log aktivitas bisa ditambahkan dengan mencatat setiap perubahan data ke sheet terpisah.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- MODAL: DOKUMEN -->
+<div class="overlay" id="docOverlay">
+  <div class="modal">
+    <h2 id="docFormTitle">Tambah Dokumen</h2>
+    <form id="docForm"></form>
+    <div class="modal-actions">
+      <button class="btn secondary" type="button" onclick="closeModal('docOverlay')">Batal</button>
+      <button class="btn" type="button" id="docSaveBtn">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ARMADA -->
+<div class="overlay" id="armadaOverlay">
+  <div class="modal">
+    <h2 id="armadaFormTitle">Tambah Data</h2>
+    <form id="armadaForm"></form>
+    <div class="modal-actions">
+      <button class="btn secondary" type="button" onclick="closeModal('armadaOverlay')">Batal</button>
+      <button class="btn" type="button" id="armadaSaveBtn">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: INVENTARIS -->
+<div class="overlay" id="invOverlay">
+  <div class="modal">
+    <h2 id="invFormTitle">Tambah Barang</h2>
+    <form id="invForm"></form>
+    <div class="modal-actions">
+      <button class="btn secondary" type="button" onclick="closeModal('invOverlay')">Batal</button>
+      <button class="btn" type="button" id="invSaveBtn">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: PENGGUNA -->
+<div class="overlay" id="userOverlay">
+  <div class="modal">
+    <h2 id="userFormTitle">Tambah Pengguna</h2>
+    <form id="userForm"></form>
+    <div class="modal-actions">
+      <button class="btn secondary" type="button" onclick="closeModal('userOverlay')">Batal</button>
+      <button class="btn" type="button" id="userSaveBtn">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: MONITORING ARMADA (FORM) -->
+<div class="overlay" id="monitoringOverlay">
+  <div class="modal wide">
+    <h2 id="monitoringFormTitle">Kelola Jadwal Armada</h2>
+    <form id="monitoringForm"></form>
+    <div class="modal-actions">
+      <button class="btn secondary" type="button" onclick="closeModal('monitoringOverlay')">Batal</button>
+      <button class="btn" type="button" id="monitoringSaveBtn">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: MONITORING ARMADA (DETAIL / LIHAT) -->
+<div class="overlay" id="monitoringDetailOverlay">
+  <div class="modal wide">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+      <h2 id="monitoringDetailTitle" style="margin:0;">Jadwal Armada</h2>
+      <button class="btn secondary" type="button" onclick="closeModal('monitoringDetailOverlay')">Tutup</button>
+    </div>
+    <div id="monitoringDetailWrapper" style="overflow-x:auto;"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================================
+   KONEKSI KE SUPABASE EDGE FUNCTION (pengganti backend Apps Script)
+   Ganti 2 nilai di bawah ini dengan milikmu:
+   - EDGE_FUNCTION_URL: https://<project-ref>.functions.supabase.co/api
+   - SUPABASE_ANON_KEY: dari Project Settings > API > anon public key
+     (anon key MEMANG aman ditaruh di frontend, ini bukan service_role key)
+========================================================================= */
+var EDGE_FUNCTION_URL = 'https://xvgiabfrjvogmtudiynf.supabase.co/functions/v1/hyper-service';
+var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2Z2lhYmZyanZvZ210dWRpeW5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5NTY2MDYsImV4cCI6MjA5ODUzMjYwNn0.EJZEnQ83yarMNU6BW4agkCyMFXNEp3FBiGJ-VfudCr4';
+
+/**
+ * Shim ini meniru API google.script.run (withSuccessHandler/withFailureHandler
+ * lalu nama fungsi) supaya SELURUH kode di bawah tidak perlu diubah sama
+ * sekali — hanya jalur transportnya yang diganti dari Apps Script ke
+ * fetch() ke Supabase Edge Function.
+ */
+var google = {
+  script: {
+    get run() {
+      var successHandler = null;
+      var failureHandler = null;
+      var proxy;
+      var runner = {
+        withSuccessHandler: function (fn) { successHandler = fn; return proxy; },
+        withFailureHandler: function (fn) { failureHandler = fn; return proxy; }
+      };
+      proxy = new Proxy(runner, {
+        get: function (target, prop) {
+          if (prop in target) return target[prop];
+          return function () {
+            var args = Array.prototype.slice.call(arguments);
+            fetch(EDGE_FUNCTION_URL, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                'apikey': SUPABASE_ANON_KEY
+              },
+              body: JSON.stringify({ action: prop, args: args })
+            })
+              .then(function (res) {
+                return res.json().catch(function () { return {}; }).then(function (data) {
+                  return { httpOk: res.ok, data: data };
+                });
+              })
+              .then(function (r) {
+                if (!r.httpOk || r.data.error) {
+                  if (failureHandler) failureHandler(new Error(r.data.error || 'Permintaan gagal.'));
+                } else if (successHandler) {
+                  successHandler(r.data.result);
+                }
+              })
+              .catch(function (err) {
+                if (failureHandler) failureHandler(err);
+              });
+          };
+        }
+      });
+      return proxy;
+    }
+  }
+};
+
+/* =========================================================================
+   KONFIGURASI DATA — sesuaikan dengan header kolom sheet Google Sheets kamu
+========================================================================= */
+var SESSION_KEY = 'ga_travel_session';
+
+var DOC_CONFIG = {
+  idField:'id',
+  columns:[
+    { key:'kategori', label:'Kategori' },
+    { key:'nama_dokumen', label:'Nama Dokumen' },
+    { key:'nomor_dokumen', label:'Nomor Dokumen' },
+    { key:'tanggal_titip', label:'Tanggal Titip' },
+    { key:'penitip', label:'Penitip' },
+    { key:'tempat_titip', label:'Tempat Titip' },
+    { key:'tanggal_terima', label:'Tanggal Terima' },
+    { key:'penerima', label:'Penerima' },
+    { key:'keterangan', label:'Keterangan' }
+  ],
+  fields:[
+    { key:'kategori', label:'Kategori', type:'select', options:['KIR','Izin Trayek','STNK','SIM Driver','Lain-lain'], required:true },
+    { key:'nama_dokumen', label:'Nama Dokumen / Objek', type:'text', required:true },
+    { key:'nomor_dokumen', label:'Nomor Dokumen', type:'text', required:true },
+    { key:'tanggal_titip', label:'Tanggal Titip', type:'date', required:true },
+    { key:'penitip', label:'Penitip', type:'text', required:true },
+    { key:'tempat_titip', label:'Tempat Titip', type:'text', required:true },
+    { key:'tanggal_terima', label:'Tanggal Terima (opsional, isi saat sudah diambil)', type:'date', required:false },
+    { key:'penerima', label:'Penerima (opsional, isi saat sudah diambil)', type:'text', required:false },
+    { key:'tracking_status', label:'Update Tracking / Posisi Berkas Saat Ini', type:'text', required:false },
+    { key:'keterangan', label:'Keterangan (opsional)', type:'text', required:false }
+  ]
+};
+
+var ARMADA_CONFIG = {
+  bus:{
+    idField:'id',
+    columns:[
+      { key:'no_armada', label:'No Armada' },
+      { key:'jenis_armada', label:'Jenis Armada' },
+      { key:'kapasitas', label:'Kapasitas' },
+      { key:'tanggal_commissioning', label:'Commissioning' },
+      { key:'status', label:'Status' }
+    ],
+    fields:[
+      { key:'no_armada', label:'No Armada', type:'text', required:true },
+      { key:'jenis_armada', label:'Jenis Armada', type:'text', required:true },
+      { key:'kapasitas', label:'Kapasitas (seat)', type:'number', required:true },
+      { key:'tanggal_commissioning', label:'Tanggal Commissioning', type:'date', required:false },
+      { key:'status', label:'Status', type:'select', options:['Aktif','Standby','Breakdown'], required:true }
+    ],
+    statusColors:{ 'Aktif':'status-aktif', 'Standby':'status-lain', 'Breakdown':'status-nonaktif' },
+    getFn:'getBuses', addFn:'addBus', updateFn:'updateBus', deleteFn:'deleteBus'
+  },
+  driver:{
+    idField:'id',
+    columns:[
+      { key:'nama', label:'Nama' },
+      { key:'no_sim', label:'No SIM' },
+      { key:'no_hp', label:'No HP' },
+      { key:'status', label:'Status' }
+    ],
+    fields:[
+      { key:'nama', label:'Nama Lengkap', type:'text', required:true },
+      { key:'no_sim', label:'Nomor SIM', type:'text', required:true },
+      { key:'no_hp', label:'Nomor HP', type:'text', required:true },
+      { key:'status', label:'Status', type:'select', options:['Permanent','Kontrak','Orientasi'], required:true }
+    ],
+    statusColors:{ 'Permanent':'status-aktif', 'Kontrak':'status-lain', 'Orientasi':'status-lain' },
+    getFn:'getDrivers', addFn:'addDriver', updateFn:'updateDriver', deleteFn:'deleteDriver'
+  }
+};
+
+var INV_CONFIG = {
+  idField:'id',
+  columns:[
+    { key:'kode_barang', label:'Kode Barang' },
+    { key:'nama_barang', label:'Nama Barang' },
+    { key:'stok_awal', label:'Stok Awal' },
+    { key:'satuan', label:'Satuan' },
+    { key:'barang_masuk', label:'Barang Masuk' },
+    { key:'tgl_barang_masuk', label:'Tgl Barang Masuk' },
+    { key:'barang_keluar', label:'Barang Keluar' },
+    { key:'tgl_barang_keluar', label:'Tgl Barang Keluar' },
+    { key:'stok_akhir', label:'Stok Akhir' }
+  ],
+  fields:[
+    { key:'kode_barang', label:'Kode Barang', type:'text', required:true },
+    { key:'nama_barang', label:'Nama Barang', type:'text', required:true },
+    { key:'stok_awal', label:'Stok Awal', type:'number', required:true },
+    { key:'satuan', label:'Satuan (pcs, liter, set, dll)', type:'text', required:true },
+    { key:'barang_masuk', label:'Barang Masuk', type:'number', required:false },
+    { key:'tgl_barang_masuk', label:'Tgl Barang Masuk', type:'date', required:false },
+    { key:'barang_keluar', label:'Barang Keluar', type:'number', required:false },
+    { key:'tgl_barang_keluar', label:'Tgl Barang Keluar', type:'date', required:false }
+  ]
+};
+
+var USER_CONFIG = {
+  idField:'id',
+  columns:[
+    { key:'username', label:'Username' },
+    { key:'nama', label:'Nama' },
+    { key:'role', label:'Role' },
+    { key:'status', label:'Status' }
+  ],
+  fields:[
+    { key:'username', label:'Username', type:'text', required:true },
+    { key:'password', label:'Password', type:'password', required:false },
+    { key:'nama', label:'Nama Lengkap', type:'text', required:true },
+    { key:'role', label:'Role', type:'select', options:['Admin','Dispatcher','Sopir'], required:true },
+    { key:'status', label:'Status', type:'select', options:['Aktif','Non-Aktif'], required:true }
+  ]
+};
+
+var CATEGORY_ORDER = ['KIR','Izin Trayek','STNK','SIM Driver','Lain-lain'];
+var CATEGORY_COLORS = { 'KIR':'#f59e0b','Izin Trayek':'#3b82f6','STNK':'#f59e0b','SIM Driver':'#3b82f6','Lain-lain':'#f59e0b' };
+
+var MONITORING_ROUTES = ['Reguler','Pos Merah','Ecovillage'];
+var MONITORING_CONFIG = {
+  idField:'id',
+  columns:[
+    { key:'no_lambung', label:'No Lambung' },
+    { key:'trip', label:'Trip' },
+    { key:'waktu', label:'Time' },
+    { key:'rute', label:'Rute' }
+  ],
+  fields:[
+    { key:'no_lambung', label:'No Lambung', type:'text', required:true },
+    { key:'trip', label:'Trip', type:'select', options:['I','II','III','IV','V','VI','VII','VIII'], required:true },
+    { key:'waktu', label:'Waktu (Time)', type:'text', required:true },
+    { key:'pickup', label:'Pick Up', type:'text', required:true },
+    { key:'dropoff', label:'Drop Off', type:'text', required:true }
+  ],
+  getFn:'getMonitoring', addFn:'addMonitoring', updateFn:'updateMonitoring', deleteFn:'deleteMonitoring'
+};
+
+var state = { docs:[], buses:[], drivers:[], inv:[], users:[], monitoring:[], monitoringRute:'Reguler', armadaTab:'bus', docEditingId:null, armadaEditingId:null, invEditingId:null, userEditingId:null, monitoringEditingNoLambung:null, currentUser:null };
+
+/* =========================================================================
+   LOGIN / SESSION
+========================================================================= */
+document.getElementById('loginForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var username = document.getElementById('loginUsername').value.trim();
+  var password = document.getElementById('loginPassword').value;
+  var errBox = document.getElementById('loginError');
+  errBox.classList.remove('show');
+
+  var btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Memeriksa...';
+
+  google.script.run
+    .withSuccessHandler(function(user){
+      btn.disabled = false; btn.textContent = 'Masuk';
+      localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+      setCurrentUser(user);
+      showApp();
+    })
+    .withFailureHandler(function(err){
+      btn.disabled = false; btn.textContent = 'Masuk';
+      errBox.textContent = err.message || String(err);
+      errBox.classList.add('show');
+    })
+    .login(username, password);
+});
+
+document.getElementById('createAdminLink').addEventListener('click', function(e){
+  e.preventDefault();
+  google.script.run
+    .withSuccessHandler(function(res){ alert(res.message || 'Selesai.'); })
+    .withFailureHandler(function(err){ alert('Gagal: '+(err.message||err)); })
+    .createDefaultAdmin();
+});
+
+document.getElementById('logoutBtn').addEventListener('click', function(){
+  if(!confirm('Keluar dari sesi ini?')) return;
+  localStorage.removeItem(SESSION_KEY);
+  state.currentUser = null;
+  document.getElementById('loginUsername').value = '';
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginError').classList.remove('show');
+  document.getElementById('appRoot').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+});
+
+function setCurrentUser(user){
+  state.currentUser = user;
+  document.getElementById('userNameLabel').textContent = user.nama || user.username;
+  document.getElementById('userRoleLabel').textContent = (user.role || '').toUpperCase();
+  document.getElementById('userAvatar').textContent = (user.nama || user.username || '?').charAt(0).toUpperCase();
+  document.getElementById('menuPengguna').classList.toggle('hidden-role', user.role !== 'Admin');
+}
+
+function showApp(){
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appRoot').style.display = 'block';
+  loadDashboard();
+}
+
+function initAuth(){
+  var raw = localStorage.getItem(SESSION_KEY);
+  if(raw){
+    try{
+      var user = JSON.parse(raw);
+      setCurrentUser(user);
+      showApp();
+      return;
+    }catch(e){ localStorage.removeItem(SESSION_KEY); }
+  }
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('appRoot').style.display = 'none';
+}
+
+/* =========================================================================
+   NAVIGASI MENU
+========================================================================= */
+var titles = { dashboard:'DASHBOARD UTAMA', arsip:'ARSIP DIGITAL', armada:'ARMADA & SOPIR', inventaris:'INVENTARIS & STOK', pengguna:'KELOLA PENGGUNA', monitoring:'MONITORING ARMADA', riwayat:'RIWAYAT AKTIVITAS' };
+document.querySelectorAll('.menu-item').forEach(function(el){ el.addEventListener('click', function(){ switchView(el.dataset.view); }); });
+function switchView(view){
+  document.querySelectorAll('.menu-item').forEach(function(n){ n.classList.toggle('active', n.dataset.view===view); });
+  document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+  document.getElementById('view-'+view).classList.add('active');
+  document.getElementById('crumbTitle').textContent = titles[view];
+  if(view==='dashboard') loadDashboard();
+  if(view==='arsip' && state.docs.length===0) loadDocuments();
+  if(view==='armada' && state.buses.length===0 && state.drivers.length===0) loadArmada();
+  if(view==='inventaris' && state.inv.length===0) loadInventaris();
+  if(view==='pengguna' && state.users.length===0) loadUsers();
+  if(view==='monitoring' && state.monitoring.length===0) loadMonitoring();
+}
+
+function tickClock(){
+  var now = new Date();
+  var h=String(now.getHours()).padStart(2,'0'), m=String(now.getMinutes()).padStart(2,'0'), s=String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('clockPill').textContent = '🕐 '+h+'.'+m+'.'+s+' WIB';
+}
+setInterval(tickClock,1000); tickClock();
+
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+
+var toastTimer=null;
+function showToast(msg,isError){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast show'+(isError?' error':'');
+  clearTimeout(toastTimer); toastTimer=setTimeout(function(){ t.classList.remove('show'); },3500);
+}
+
+/* ---------------- GENERIC FORM RENDERER ---------------- */
+function renderFormFields(fields, existing, prefix){
+  var html='';
+  fields.forEach(function(f){
+    var value = existing ? (existing[f.key]||'') : '';
+    html+='<div class="field"><label>'+f.label+'</label>';
+    if(f.type==='select'){
+      html+='<select id="'+prefix+f.key+'">';
+      f.options.forEach(function(opt){ html+='<option value="'+opt+'"'+(opt===value?' selected':'')+'>'+opt+'</option>'; });
+      html+='</select>';
+    } else {
+      html+='<input type="'+f.type+'" id="'+prefix+f.key+'" value="'+(f.type==='password'?'':value)+'" placeholder="'+(f.type==='password' && existing ? 'Kosongkan jika tidak ganti password' : '')+'">';
+      if(f.type==='password' && existing){ html+='<div class="hint">Kosongkan jika tidak ingin mengganti password.</div>'; }
+    }
+    html+='</div>';
+  });
+  return html;
+}
+function readFormValues(fields, prefix){
+  var payload={}, valid=true;
+  fields.forEach(function(f){
+    var el=document.getElementById(prefix+f.key);
+    var val=el.value.trim();
+    if(f.required && !val) valid=false;
+    if(f.type==='password' && !val){
+      // kosongkan password berarti tidak diganti, tidak dikirim sama sekali
+    } else if((f.type==='date' || f.type==='number') && !val){
+      payload[f.key] = null; // kosong untuk date/number harus null, bukan ""
+    } else {
+      payload[f.key] = val;
+    }
+  });
+  return { payload:payload, valid:valid };
+}
+
+/** Urutkan array of objects A-Z (alfanumerik) berdasarkan satu field. */
+function sortByField(arr, field){
+  return arr.slice().sort(function(a,b){
+    return String(a[field]||'').localeCompare(String(b[field]||''), 'id', { numeric:true, sensitivity:'base' });
+  });
+}
+
+/* =========================================================================
+   DASHBOARD
+========================================================================= */
+function loadDashboard(){
+  google.script.run
+    .withSuccessHandler(renderDashboard)
+    .withFailureHandler(function(err){ showToast('Gagal memuat dashboard: '+(err.message||err), true); })
+    .getDashboardStats();
+}
+function renderDashboard(stats){
+  state.lastStats = stats;
+  document.getElementById('statDocs').textContent = stats.totalDocs;
+  document.getElementById('statDocsSub').textContent = stats.totalDocs>0 ? '100% Tersimpan aman' : 'Belum ada dokumen';
+  document.getElementById('statBuses').textContent = stats.totalBuses;
+  document.getElementById('statBusesSub').textContent = stats.busAktif+' Aktif • '+stats.busBreakdown+' Breakdown • '+stats.busStandby+' Standby';
+  document.getElementById('statDrivers').textContent = stats.driverAktif;
+  document.getElementById('statDriversSub').textContent = stats.driverPermanent+' Permanent • '+stats.driverKontrak+' Kontrak • '+stats.driverOrientasi+' Orientasi';
+  document.getElementById('statCompliance').textContent = stats.compliance+'%';
+  var subEl = document.getElementById('statComplianceSub');
+  subEl.textContent = stats.compliance>=80 ? 'Sangat Aman' : (stats.compliance>=50 ? 'Perlu Perhatian' : 'Butuh Tindakan Segera');
+  subEl.className = 'stat-sub ' + (stats.compliance>=80 ? 'ok' : (stats.compliance<50?'bad':''));
+
+  var maxVal = Math.max.apply(null, CATEGORY_ORDER.map(function(c){ return stats.categoryCounts[c]||0; }).concat([1]));
+  var chartHtml='';
+  CATEGORY_ORDER.forEach(function(cat){
+    var val = stats.categoryCounts[cat]||0;
+    var heightPct = Math.max((val/maxVal)*100, val>0?8:2);
+    chartHtml+='<div class="chart-col"><div class="chart-bar" style="height:'+heightPct+'%;background:'+CATEGORY_COLORS[cat]+';"></div><div class="chart-col-label">'+cat+'</div></div>';
+  });
+  document.getElementById('chartWrap').innerHTML = chartHtml;
+
+  document.getElementById('alertBadge').textContent = stats.alerts.length+' Dokumen';
+  var alertHtml='';
+  if(stats.alerts.length===0){ alertHtml='<div class="empty-mini">Semua dokumen sudah diambil 🎉</div>'; }
+  else {
+    stats.alerts.slice(0,6).forEach(function(a){
+      alertHtml+='<div class="alert-item warn"><div class="alert-top"><span class="alert-tag">BELUM DIAMBIL</span><span class="alert-date">Titip: '+a.tanggal+'</span></div><div class="alert-name">'+a.nama+'</div><div class="alert-sub">'+a.kategori+' • Penitip: '+a.penitip+' • '+a.tempat+'</div></div>';
+    });
+  }
+  document.getElementById('alertList').innerHTML = alertHtml;
+}
+
+/* =========================================================================
+   ARSIP DIGITAL
+========================================================================= */
+document.getElementById('searchArsip').addEventListener('input', renderDocTable);
+document.getElementById('filterArsipKategori').addEventListener('change', renderDocTable);
+document.getElementById('filterArsipStatus').addEventListener('change', renderDocTable);
+function loadDocuments(){
+  document.getElementById('docTableWrapper').innerHTML='<div class="loader"></div>';
+  google.script.run
+    .withSuccessHandler(function(rows){ state.docs=rows||[]; renderDocTable(); })
+    .withFailureHandler(function(err){ showToast('Gagal memuat dokumen: '+(err.message||err), true); document.getElementById('docTableWrapper').innerHTML='<div class="empty-state">Gagal memuat data.</div>'; })
+    .getDocuments();
+}
+function filteredDocs(){
+  var q=document.getElementById('searchArsip').value.toLowerCase();
+  var kategori=document.getElementById('filterArsipKategori').value;
+  var status=document.getElementById('filterArsipStatus').value;
+  var rows = state.docs.filter(function(r){
+    if(q && !DOC_CONFIG.columns.some(function(c){ return String(r[c.key]||'').toLowerCase().indexOf(q)!==-1; }) && String(r.tracking_status||'').toLowerCase().indexOf(q)===-1) return false;
+    if(kategori && r.kategori!==kategori) return false;
+    if(status==='belum' && r.tanggal_terima) return false;
+    if(status==='sudah' && !r.tanggal_terima) return false;
+    return true;
+  });
+  return sortByField(rows, 'tanggal_titip');
+}
+function renderDocTable(){
+  var rows=filteredDocs();
+  var wrap=document.getElementById('docTableWrapper');
+  if(rows.length===0){ wrap.innerHTML='<div class="empty-state">Belum ada dokumen. Klik "Tambah Dokumen" untuk mulai.</div>'; return; }
+  var html='<table><thead><tr>'; DOC_CONFIG.columns.forEach(function(c){ html+='<th>'+c.label+'</th>'; }); html+='<th>STATUS</th><th>AKSI</th></tr></thead><tbody>';
+  rows.forEach(function(r){
+    var st=getDocStatus(r);
+    html+='<tr>';
+    DOC_CONFIG.columns.forEach(function(c){
+      var val = (r[c.key]!==undefined && r[c.key]!==null) ? r[c.key] : '';
+      if(c.key==='nama_dokumen'){
+        html+='<td>'+val+(r.tracking_status?'<div style="font-size:10.5px;color:var(--muted);margin-top:2px;">📍 '+r.tracking_status+'</div>':'')+'</td>';
+      } else {
+        html+='<td>'+val+'</td>';
+      }
+    });
+    html+='<td><span class="status-chip '+st.cls+'">'+st.label+'</span></td>';
+    html+='<td class="actions-cell"><button class="icon-btn" onclick="openDocForm(\''+r[DOC_CONFIG.idField]+'\')">Edit</button><button class="icon-btn" onclick="deleteDoc(\''+r[DOC_CONFIG.idField]+'\')">Hapus</button></td></tr>';
+  });
+  html+='</tbody></table>'; wrap.innerHTML=html;
+}
+function getDocStatus(row){
+  if(row.tanggal_terima) return { label:'Sudah Diambil', cls:'status-aktif' };
+  return { label:'Belum Diambil', cls:'status-lain' };
+}
+function openDocForm(id){
+  state.docEditingId=id;
+  document.getElementById('docFormTitle').textContent = id?'Edit Dokumen':'Tambah Dokumen';
+  var existing = id ? state.docs.find(function(r){ return String(r[DOC_CONFIG.idField])===String(id); }) : null;
+  document.getElementById('docForm').innerHTML = renderFormFields(DOC_CONFIG.fields, existing, 'docfield_');
+  openModal('docOverlay');
+}
+document.getElementById('docSaveBtn').addEventListener('click', function(){
+  var res = readFormValues(DOC_CONFIG.fields, 'docfield_');
+  if(!res.valid){ showToast('Mohon lengkapi semua field wajib.', true); return; }
+  var btn=document.getElementById('docSaveBtn'); btn.disabled=true; btn.textContent='Menyimpan...';
+  var fn = state.docEditingId ? 'updateDocument' : 'addDocument';
+  var args = state.docEditingId ? [state.docEditingId, res.payload] : [res.payload];
+  google.script.run
+    .withSuccessHandler(function(){ btn.disabled=false; btn.textContent='Simpan'; closeModal('docOverlay'); showToast('Dokumen berhasil disimpan.'); loadDocuments(); loadDashboard(); })
+    .withFailureHandler(function(err){ btn.disabled=false; btn.textContent='Simpan'; showToast('Gagal menyimpan: '+(err.message||err), true); })[fn].apply(null,args);
+});
+function deleteDoc(id){
+  if(!confirm('Yakin ingin menghapus dokumen ini?')) return;
+  google.script.run.withSuccessHandler(function(){ showToast('Dokumen berhasil dihapus.'); loadDocuments(); loadDashboard(); }).withFailureHandler(function(err){ showToast('Gagal menghapus: '+(err.message||err), true); }).deleteDocument(id);
+}
+
+/* =========================================================================
+   ARMADA & SOPIR
+========================================================================= */
+document.querySelectorAll('.subtab').forEach(function(el){
+  el.addEventListener('click', function(){
+    document.querySelectorAll('.subtab').forEach(function(n){ n.classList.remove('active'); });
+    el.classList.add('active'); state.armadaTab=el.dataset.armadatab;
+    document.getElementById('searchArmada').value='';
+    updateArmadaStatusFilterOptions();
+    renderArmadaTable();
+  });
+});
+document.getElementById('searchArmada').addEventListener('input', renderArmadaTable);
+document.getElementById('filterArmadaStatus').addEventListener('change', renderArmadaTable);
+document.getElementById('addArmadaBtn').addEventListener('click', function(){ openArmadaForm(null); });
+function updateArmadaStatusFilterOptions(){
+  var cfg=ARMADA_CONFIG[state.armadaTab];
+  var statusField=cfg.fields.find(function(f){ return f.key==='status'; });
+  var sel=document.getElementById('filterArmadaStatus');
+  var options='<option value="">Semua Status</option>';
+  (statusField.options||[]).forEach(function(opt){ options+='<option value="'+opt+'">'+opt+'</option>'; });
+  sel.innerHTML=options;
+}
+function loadArmada(){
+  document.getElementById('armadaTableWrapper').innerHTML='<div class="loader"></div>';
+  google.script.run.withSuccessHandler(function(rows){ state.buses=rows||[]; loadDrivers(); }).withFailureHandler(function(err){ showToast('Gagal memuat armada: '+(err.message||err), true); }).getBuses();
+}
+function loadDrivers(){
+  google.script.run.withSuccessHandler(function(rows){ state.drivers=rows||[]; updateArmadaStatusFilterOptions(); renderArmadaTable(); }).withFailureHandler(function(err){ showToast('Gagal memuat sopir: '+(err.message||err), true); }).getDrivers();
+}
+function filteredArmada(){
+  var cfg=ARMADA_CONFIG[state.armadaTab];
+  var data=state.armadaTab==='bus'?state.buses:state.drivers;
+  var q=document.getElementById('searchArmada').value.toLowerCase();
+  var status=document.getElementById('filterArmadaStatus').value;
+  var rows = data.filter(function(r){
+    if(q && !cfg.columns.some(function(c){ return String(r[c.key]||'').toLowerCase().indexOf(q)!==-1; })) return false;
+    if(status && r.status!==status) return false;
+    return true;
+  });
+  var sortField = state.armadaTab==='bus' ? 'no_armada' : 'nama';
+  return sortByField(rows, sortField);
+}
+function renderArmadaTable(){
+  var cfg=ARMADA_CONFIG[state.armadaTab];
+  var rows=filteredArmada();
+  var wrap=document.getElementById('armadaTableWrapper');
+  if(rows.length===0){ wrap.innerHTML='<div class="empty-state">Belum ada data. Klik "Tambah Data" untuk mulai.</div>'; return; }
+  var html='<table><thead><tr>'; cfg.columns.forEach(function(c){ html+='<th>'+c.label+'</th>'; }); html+='<th>AKSI</th></tr></thead><tbody>';
+  rows.forEach(function(r){
+    html+='<tr>';
+    cfg.columns.forEach(function(c){
+      if(c.key==='status'){
+        var st=String(r[c.key]||''); var cls= (cfg.statusColors && cfg.statusColors[st]) || 'status-lain';
+        html+='<td><span class="status-chip '+cls+'">'+st+'</span></td>';
+      } else { html+='<td>'+(r[c.key]!==undefined && r[c.key]!==null?r[c.key]:'')+'</td>'; }
+    });
+    html+='<td class="actions-cell"><button class="icon-btn" onclick="openArmadaForm(\''+r[cfg.idField]+'\')">Edit</button><button class="icon-btn" onclick="deleteArmada(\''+r[cfg.idField]+'\')">Hapus</button></td></tr>';
+  });
+  html+='</tbody></table>'; wrap.innerHTML=html;
+}
+function openArmadaForm(id){
+  var cfg=ARMADA_CONFIG[state.armadaTab];
+  var data=state.armadaTab==='bus'?state.buses:state.drivers;
+  state.armadaEditingId=id;
+  document.getElementById('armadaFormTitle').textContent = id?'Edit Data':'Tambah Data';
+  var existing = id ? data.find(function(r){ return String(r[cfg.idField])===String(id); }) : null;
+  document.getElementById('armadaForm').innerHTML = renderFormFields(cfg.fields, existing, 'armfield_');
+  openModal('armadaOverlay');
+}
+document.getElementById('armadaSaveBtn').addEventListener('click', function(){
+  var cfg=ARMADA_CONFIG[state.armadaTab];
+  var res = readFormValues(cfg.fields, 'armfield_');
+  if(!res.valid){ showToast('Mohon lengkapi semua field wajib.', true); return; }
+  var btn=document.getElementById('armadaSaveBtn'); btn.disabled=true; btn.textContent='Menyimpan...';
+  var fn = state.armadaEditingId ? cfg.updateFn : cfg.addFn;
+  var args = state.armadaEditingId ? [state.armadaEditingId, res.payload] : [res.payload];
+  google.script.run
+    .withSuccessHandler(function(){ btn.disabled=false; btn.textContent='Simpan'; closeModal('armadaOverlay'); showToast('Data berhasil disimpan.'); loadArmada(); loadDashboard(); })
+    .withFailureHandler(function(err){ btn.disabled=false; btn.textContent='Simpan'; showToast('Gagal menyimpan: '+(err.message||err), true); })[fn].apply(null,args);
+});
+function deleteArmada(id){
+  if(!confirm('Yakin ingin menghapus data ini?')) return;
+  var cfg=ARMADA_CONFIG[state.armadaTab];
+  google.script.run.withSuccessHandler(function(){ showToast('Data berhasil dihapus.'); loadArmada(); loadDashboard(); }).withFailureHandler(function(err){ showToast('Gagal menghapus: '+(err.message||err), true); })[cfg.deleteFn](id);
+}
+
+/* =========================================================================
+   INVENTARIS & STOK
+========================================================================= */
+document.getElementById('searchInventaris').addEventListener('input', renderInvTable);
+document.getElementById('filterInvStatus').addEventListener('change', renderInvTable);
+function loadInventaris(){
+  document.getElementById('invTableWrapper').innerHTML='<div class="loader"></div>';
+  google.script.run
+    .withSuccessHandler(function(rows){ state.inv=rows||[]; renderInvTable(); })
+    .withFailureHandler(function(err){ showToast('Gagal memuat inventaris: '+(err.message||err), true); })
+    .getInventaris();
+}
+function filteredInv(){
+  var q=document.getElementById('searchInventaris').value.toLowerCase();
+  var statusFilter=document.getElementById('filterInvStatus').value;
+  var rows = state.inv.filter(function(r){
+    if(q && !INV_CONFIG.columns.some(function(c){ return String(r[c.key]||'').toLowerCase().indexOf(q)!==-1; })) return false;
+    if(statusFilter && stockStatus(r).label!==statusFilter) return false;
+    return true;
+  });
+  return sortByField(rows, 'nama_barang');
+}
+function stockStatus(item){
+  var akhir=Number(item.stok_akhir)||0;
+  if(akhir<=0) return { label:'Habis', color:'var(--danger)', bg:'var(--danger-bg)' };
+  return { label:'Tersedia', color:'var(--ok)', bg:'var(--ok-bg)' };
+}
+function renderInvTable(){
+  var rows=filteredInv();
+  var wrap=document.getElementById('invTableWrapper');
+  if(rows.length===0){ wrap.innerHTML='<div class="empty-state">Belum ada data.</div>'; return; }
+  var html='<table><thead><tr><th>No</th>'; INV_CONFIG.columns.forEach(function(c){ html+='<th>'+c.label+'</th>'; }); html+='<th>STATUS</th><th>AKSI</th></tr></thead><tbody>';
+  rows.forEach(function(r, idx){
+    var st=stockStatus(r);
+    html+='<tr><td>'+(idx+1)+'</td>'; INV_CONFIG.columns.forEach(function(c){ html+='<td>'+(r[c.key]!==undefined && r[c.key]!==null?r[c.key]:'')+'</td>'; });
+    html+='<td><span class="status-chip" style="background:'+st.bg+';color:'+st.color+';">'+st.label+'</span></td>';
+    html+='<td class="actions-cell"><button class="icon-btn" onclick="openInvForm(\''+r[INV_CONFIG.idField]+'\')">Edit</button><button class="icon-btn" onclick="deleteInv(\''+r[INV_CONFIG.idField]+'\')">Hapus</button></td></tr>';
+  });
+  html+='</tbody></table>'; wrap.innerHTML=html;
+}
+function openInvForm(id){
+  state.invEditingId=id;
+  document.getElementById('invFormTitle').textContent = id?'Edit Barang':'Tambah Barang';
+  var existing = id ? state.inv.find(function(r){ return String(r[INV_CONFIG.idField])===String(id); }) : null;
+  document.getElementById('invForm').innerHTML = renderFormFields(INV_CONFIG.fields, existing, 'invfield_');
+  openModal('invOverlay');
+}
+document.getElementById('invSaveBtn').addEventListener('click', function(){
+  var res = readFormValues(INV_CONFIG.fields, 'invfield_');
+  if(!res.valid){ showToast('Mohon lengkapi semua field wajib.', true); return; }
+
+  // Hitung Stok Akhir otomatis: Stok Awal + Barang Masuk - Barang Keluar
+  var stokAwal = Number(res.payload.stok_awal)||0;
+  var barangMasuk = Number(res.payload.barang_masuk)||0;
+  var barangKeluar = Number(res.payload.barang_keluar)||0;
+  res.payload.stok_akhir = stokAwal + barangMasuk - barangKeluar;
+
+  var btn=document.getElementById('invSaveBtn'); btn.disabled=true; btn.textContent='Menyimpan...';
+  var fn = state.invEditingId ? 'updateInventaris' : 'addInventaris';
+  var args = state.invEditingId ? [state.invEditingId, res.payload] : [res.payload];
+  google.script.run
+    .withSuccessHandler(function(){ btn.disabled=false; btn.textContent='Simpan'; closeModal('invOverlay'); showToast('Barang berhasil disimpan.'); loadInventaris(); })
+    .withFailureHandler(function(err){ btn.disabled=false; btn.textContent='Simpan'; showToast('Gagal menyimpan: '+(err.message||err), true); })[fn].apply(null,args);
+});
+function deleteInv(id){
+  if(!confirm('Yakin ingin menghapus barang ini?')) return;
+  google.script.run.withSuccessHandler(function(){ showToast('Barang berhasil dihapus.'); loadInventaris(); }).withFailureHandler(function(err){ showToast('Gagal menghapus: '+(err.message||err), true); }).deleteInventaris(id);
+}
+
+/* =========================================================================
+   KELOLA PENGGUNA
+========================================================================= */
+document.getElementById('searchPengguna').addEventListener('input', renderUserTable);
+document.getElementById('filterUserRole').addEventListener('change', renderUserTable);
+document.getElementById('filterUserStatus').addEventListener('change', renderUserTable);
+function loadUsers(){
+  document.getElementById('userTableWrapper').innerHTML='<div class="loader"></div>';
+  google.script.run.withSuccessHandler(function(rows){ state.users=rows||[]; renderUserTable(); }).withFailureHandler(function(err){ showToast('Gagal memuat pengguna: '+(err.message||err), true); }).getUsers();
+}
+function filteredUsers(){
+  var q=document.getElementById('searchPengguna').value.toLowerCase();
+  var role=document.getElementById('filterUserRole').value;
+  var status=document.getElementById('filterUserStatus').value;
+  var rows = state.users.filter(function(r){
+    if(q && !USER_CONFIG.columns.some(function(c){ return String(r[c.key]||'').toLowerCase().indexOf(q)!==-1; })) return false;
+    if(role && r.role!==role) return false;
+    if(status && r.status!==status) return false;
+    return true;
+  });
+  return sortByField(rows, 'nama');
+}
+function renderUserTable(){
+  var rows=filteredUsers();
+  var wrap=document.getElementById('userTableWrapper');
+  if(rows.length===0){ wrap.innerHTML='<div class="empty-state">Belum ada pengguna. Klik "Tambah Pengguna" untuk mulai.</div>'; return; }
+  var html='<table><thead><tr>'; USER_CONFIG.columns.forEach(function(c){ html+='<th>'+c.label+'</th>'; }); html+='<th>AKSI</th></tr></thead><tbody>';
+  rows.forEach(function(r){
+    html+='<tr>';
+    USER_CONFIG.columns.forEach(function(c){
+      if(c.key==='status'){ var st=String(r[c.key]||''); html+='<td><span class="status-chip '+(st==='Aktif'?'status-aktif':'status-nonaktif')+'">'+st+'</span></td>'; }
+      else { html+='<td>'+(r[c.key]!==undefined && r[c.key]!==null?r[c.key]:'')+'</td>'; }
+    });
+    html+='<td class="actions-cell"><button class="icon-btn" onclick="openUserForm(\''+r[USER_CONFIG.idField]+'\')">Edit</button><button class="icon-btn" onclick="deleteUserRow(\''+r[USER_CONFIG.idField]+'\')">Hapus</button></td></tr>';
+  });
+  html+='</tbody></table>'; wrap.innerHTML=html;
+}
+function openUserForm(id){
+  state.userEditingId=id;
+  document.getElementById('userFormTitle').textContent = id?'Edit Pengguna':'Tambah Pengguna';
+  var existing = id ? state.users.find(function(r){ return String(r[USER_CONFIG.idField])===String(id); }) : null;
+  document.getElementById('userForm').innerHTML = renderFormFields(USER_CONFIG.fields, existing, 'userfield_');
+  if(!existing){
+    var pwField = document.getElementById('userfieldPassword_'.replace('_','')+'');
+  }
+  openModal('userOverlay');
+}
+document.getElementById('userSaveBtn').addEventListener('click', function(){
+  var fields = USER_CONFIG.fields.slice();
+  if(!state.userEditingId){ fields = fields.map(function(f){ if(f.key==='Password') return Object.assign({}, f, {required:true}); return f; }); }
+  var res = readFormValues(fields, 'userfield_');
+  if(!res.valid){ showToast('Mohon lengkapi semua field wajib.', true); return; }
+  var btn=document.getElementById('userSaveBtn'); btn.disabled=true; btn.textContent='Menyimpan...';
+  var fn = state.userEditingId ? 'updateUser' : 'addUser';
+  var args = state.userEditingId ? [state.userEditingId, res.payload] : [res.payload];
+  google.script.run
+    .withSuccessHandler(function(){ btn.disabled=false; btn.textContent='Simpan'; closeModal('userOverlay'); showToast('Pengguna berhasil disimpan.'); loadUsers(); })
+    .withFailureHandler(function(err){ btn.disabled=false; btn.textContent='Simpan'; showToast('Gagal menyimpan: '+(err.message||err), true); })[fn].apply(null,args);
+});
+function deleteUserRow(id){
+  if(state.currentUser && String(state.currentUser.id)===String(id)){ showToast('Tidak bisa menghapus akun yang sedang login.', true); return; }
+  if(!confirm('Yakin ingin menghapus pengguna ini?')) return;
+  google.script.run.withSuccessHandler(function(){ showToast('Pengguna berhasil dihapus.'); loadUsers(); }).withFailureHandler(function(err){ showToast('Gagal menghapus: '+(err.message||err), true); }).deleteUser(id);
+}
+
+/* =========================================================================
+   MONITORING ARMADA
+========================================================================= */
+var TRIP_GROUPS = [
+  { label:'TRIP PAGI', icon:'☀️', trips:['Pagi I','Pagi II','Pagi III','Pagi IV','Pagi V','Pagi VI'] },
+  { label:'TRIP SORE', icon:'🌙', trips:['Sore I','Sore II','Sore III','Sore IV','Sore V','Sore VI'] }
+];
+var TRIP_SLOTS = TRIP_GROUPS[0].trips.concat(TRIP_GROUPS[1].trips);
+
+document.querySelectorAll('#view-monitoring .subtab').forEach(function(el){
+  el.addEventListener('click', function(){
+    document.querySelectorAll('#view-monitoring .subtab').forEach(function(n){ n.classList.remove('active'); });
+    el.classList.add('active');
+    state.monitoringRute = el.dataset.rute;
+    document.getElementById('searchMonitoring').value='';
+    loadMonitoring();
+  });
+});
+document.getElementById('searchMonitoring').addEventListener('input', renderMonitoringTable);
+
+function loadMonitoring(){
+  document.getElementById('monitoringTableWrapper').innerHTML='<div class="loader"></div>';
+  google.script.run
+    .withSuccessHandler(function(rows){ state.monitoring=rows||[]; renderMonitoringTable(); })
+    .withFailureHandler(function(err){ showToast('Gagal memuat data monitoring: '+(err.message||err), true); document.getElementById('monitoringTableWrapper').innerHTML='<div class="empty-state">Gagal memuat data.</div>'; })
+    .getMonitoring(state.monitoringRute);
+}
+
+function filteredMonitoringRaw(){
+  var q=document.getElementById('searchMonitoring').value.toLowerCase();
+  if(!q) return state.monitoring;
+  return state.monitoring.filter(function(r){
+    return MONITORING_CONFIG.columns.some(function(c){ return String(r[c.key]||'').toLowerCase().indexOf(q)!==-1; });
+  });
+}
+
+/** Kelompokkan baris mentah per No Lambung, untuk ditampilkan sebagai satu baris per armada di list. */
+function groupedMonitoring(){
+  var rows = filteredMonitoringRaw();
+  var map = {}, order = [];
+  rows.forEach(function(r){
+    var key = r.no_lambung;
+    if(!map[key]){ map[key] = { no_lambung:r.no_lambung, rute:r.rute, rows:[] }; order.push(map[key]); }
+    map[key].rows.push(r);
+  });
+  return sortByField(order, 'no_lambung');
+}
+
+function renderMonitoringTable(){
+  var groups=groupedMonitoring();
+  var wrap=document.getElementById('monitoringTableWrapper');
+  if(groups.length===0){ wrap.innerHTML='<div class="empty-state">Belum ada jadwal untuk rute ini. Klik "Tambah Jadwal" untuk mulai.</div>'; return; }
+  var html='<table><thead><tr><th>No Lambung</th><th>Jumlah Trip</th><th>Rute</th><th>AKSI</th></tr></thead><tbody>';
+  groups.forEach(function(g){
+    var safeNama = String(g.no_lambung).replace(/'/g,"&#39;");
+    html+='<tr><td>'+g.no_lambung+'</td><td>'+g.rows.length+' Trip</td><td>'+g.rute+'</td>';
+    html+='<td class="actions-cell">'+
+      '<button class="icon-btn" onclick="viewMonitoringDetail(\''+safeNama+'\')">👁 Lihat</button>'+
+      '<button class="icon-btn" onclick="openMonitoringForm(\''+safeNama+'\')">Edit</button>'+
+      '<button class="icon-btn" onclick="deleteMonitoringBusRow(\''+safeNama+'\')">Hapus</button>'+
+    '</td></tr>';
+  });
+  html+='</tbody></table>'; wrap.innerHTML=html;
+}
+
+/** Buka form dengan 8 slot trip (I-VIII) sekaligus untuk satu No Lambung. */
+function openMonitoringForm(noLambung){
+  state.monitoringEditingNoLambung = noLambung || null;
+  document.getElementById('monitoringFormTitle').textContent = noLambung ? 'Edit Jadwal Armada' : 'Tambah Jadwal Armada';
+
+  var existingRows = noLambung ? state.monitoring.filter(function(r){ return String(r.no_lambung)===String(noLambung); }) : [];
+  var byTrip = {};
+  existingRows.forEach(function(r){ byTrip[r.trip] = r; });
+
+  var html = '<div class="field"><label>No Lambung</label><input type="text" id="monfield_no_lambung" value="'+(noLambung||'')+'" placeholder="Contoh: BUS 02 HJF"></div>';
+  html += '<div style="font-size:11.5px;color:var(--muted);margin:4px 0 12px;">Isi trip yang berjalan saja, sisanya boleh dikosongkan. Pilih warna kolom di setiap trip sesuai kebutuhan tampilan.</div>';
+
+  TRIP_GROUPS.forEach(function(group){
+    html += '<div style="font-weight:800;font-size:12px;letter-spacing:0.03em;color:var(--accent-dark);margin:14px 0 8px;">'+group.icon+' '+group.label+'</div>';
+    html += '<div class="trip-grid cols-3">';
+    group.trips.forEach(function(trip){
+      var i = TRIP_SLOTS.indexOf(trip);
+      var existing = byTrip[trip];
+      var warna = existing ? (existing.warna || 'abu') : 'abu';
+      html += '<div class="trip-block">';
+      html += '<div class="trip-title" style="display:flex;justify-content:space-between;align-items:center;">'+
+        '<span>'+trip+'</span>'+
+        '<select id="tripcolor_'+i+'" style="font-size:10px;padding:3px 5px;border:1px solid var(--border);border-radius:5px;font-weight:600;">'+
+          '<option value="abu"'+(warna==='abu'?' selected':'')+'>Abu-abu</option>'+
+          '<option value="biru"'+(warna==='biru'?' selected':'')+'>Biru</option>'+
+        '</select>'+
+      '</div>';
+      html += '<div class="trip-field"><label>Waktu</label><input type="text" id="triptime_'+i+'" value="'+(existing?existing.waktu||'':'')+'" placeholder="mis. 07:00"></div>';
+      html += '<div class="trip-field"><label>Pick Up</label><input type="text" id="trippickup_'+i+'" value="'+(existing?existing.pickup||'':'')+'"></div>';
+      html += '<div class="trip-field"><label>Drop Off</label><input type="text" id="tripdropoff_'+i+'" value="'+(existing?existing.dropoff||'':'')+'"></div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+
+  document.getElementById('monitoringForm').innerHTML = html;
+  openModal('monitoringOverlay');
+}
+
+document.getElementById('monitoringSaveBtn').addEventListener('click', function(){
+  var noLambungVal = document.getElementById('monfield_no_lambung').value.trim();
+  if(!noLambungVal){ showToast('No Lambung wajib diisi.', true); return; }
+
+  var trips = [];
+  TRIP_SLOTS.forEach(function(trip, i){
+    var waktu = document.getElementById('triptime_'+i).value.trim();
+    var pickup = document.getElementById('trippickup_'+i).value.trim();
+    var dropoff = document.getElementById('tripdropoff_'+i).value.trim();
+    var warna = document.getElementById('tripcolor_'+i).value;
+    if(waktu || pickup || dropoff){ trips.push({ trip:trip, waktu:waktu, pickup:pickup, dropoff:dropoff, warna:warna }); }
+  });
+
+  var btn=document.getElementById('monitoringSaveBtn'); btn.disabled=true; btn.textContent='Menyimpan...';
+  var originalNoLambung = state.monitoringEditingNoLambung;
+
+  google.script.run
+    .withSuccessHandler(function(){ btn.disabled=false; btn.textContent='Simpan'; closeModal('monitoringOverlay'); showToast('Jadwal berhasil disimpan.'); loadMonitoring(); })
+    .withFailureHandler(function(err){ btn.disabled=false; btn.textContent='Simpan'; showToast('Gagal menyimpan: '+(err.message||err), true); })
+    .saveMonitoringBusSchedule(state.monitoringRute, originalNoLambung, noLambungVal, trips);
+});
+
+function deleteMonitoringBusRow(noLambung){
+  if(!confirm('Yakin ingin menghapus seluruh jadwal armada "'+noLambung+'" ini?')) return;
+  google.script.run
+    .withSuccessHandler(function(){ showToast('Jadwal berhasil dihapus.'); loadMonitoring(); })
+    .withFailureHandler(function(err){ showToast('Gagal menghapus: '+(err.message||err), true); })
+    .deleteMonitoringBus(state.monitoringRute, noLambung);
+}
+
+/**
+ * Tampilan "Lihat" — meniru gaya tabel jadwal fisik (header dwibahasa,
+ * kolom No Lambung & Trip digabung/merge, pewarnaan berselang per grup trip).
+ */
+function viewMonitoringDetail(noLambung){
+  var rows = state.monitoring.filter(function(r){ return String(r.no_lambung)===String(noLambung); });
+  rows.sort(function(a,b){ return TRIP_SLOTS.indexOf(a.trip) - TRIP_SLOTS.indexOf(b.trip); });
+  document.getElementById('monitoringDetailTitle').textContent = 'Jadwal Armada No. '+noLambung+' — Rute '+state.monitoringRute;
+  document.getElementById('monitoringDetailWrapper').innerHTML = buildMonitoringDetailTable(noLambung, rows);
+  openModal('monitoringDetailOverlay');
+}
+
+function buildMonitoringDetailTable(noLambung, rows){
+  if(rows.length===0) return '<div class="empty-state">Tidak ada data jadwal untuk armada ini.</div>';
+
+  var groups=[], groupMap={};
+  rows.forEach(function(r){
+    if(!groupMap[r.trip]){ groupMap[r.trip]={ trip:r.trip, rows:[] }; groups.push(groupMap[r.trip]); }
+    groupMap[r.trip].rows.push(r);
+  });
+
+  var totalRows = rows.length;
+  var th = 'border:1px solid #333;padding:10px 12px;background:#9ca3af;color:#111;font-weight:700;';
+  var td = 'border:1px solid #333;padding:8px 12px;';
+
+  var html = '<table style="border-collapse:collapse;width:100%;border:3px dashed #14b8a6;font-size:13px;">';
+  html += '<thead><tr>';
+  html += '<th style="'+th+'">NO LAMBUNG<br><span style="font-weight:400;font-size:11px;">字号</span></th>';
+  html += '<th style="'+th+'">TRIP</th>';
+  html += '<th style="'+th+'">TIME <span style="font-weight:400;font-size:11px;">时间</span></th>';
+  html += '<th style="'+th+'">Pick Up <span style="font-weight:400;font-size:11px;">捡起</span></th>';
+  html += '<th style="'+th+'">Drop Off <span style="font-weight:400;font-size:11px;">送货</span></th>';
+  html += '</tr></thead><tbody>';
+
+  var firstRow = true;
+  groups.forEach(function(g, gi){
+    var groupWarna = (g.rows[0] && g.rows[0].warna) || 'abu';
+    var bg = groupWarna === 'biru' ? '#b8d4ea' : '#e5e5e5';
+    g.rows.forEach(function(r, ri){
+      html += '<tr style="background:'+bg+';">';
+      if(firstRow){
+        html += '<td rowspan="'+totalRows+'" style="'+td+'text-align:center;background:#e5e5e5;font-weight:700;vertical-align:middle;">'+noLambung+'</td>';
+        firstRow = false;
+      }
+      if(ri===0){
+        html += '<td rowspan="'+g.rows.length+'" style="'+td+'text-align:center;vertical-align:middle;font-weight:600;">'+g.trip+'</td>';
+      }
+      html += '<td style="'+td+'text-align:center;">'+(r.waktu||'')+'</td>';
+      html += '<td style="'+td+'">'+(r.pickup||'')+'</td>';
+      html += '<td style="'+td+'">'+(r.dropoff||'')+'</td>';
+      html += '</tr>';
+    });
+  });
+
+  html += '</tbody></table>';
+  return html;
+}
+
+function downloadMonitoringReport(){
+  var rows = filteredMonitoringRaw();
+  var cols = MONITORING_CONFIG.columns.concat([{ key:'pickup', label:'Pick Up' }, { key:'dropoff', label:'Drop Off' }]);
+  exportCSV('Laporan_Monitoring_'+state.monitoringRute.replace(/\s+/g,'_')+'_'+todayStamp()+'.csv', cols, rows);
+}
+
+/* =========================================================================
+   DOWNLOAD LAPORAN (CSV)
+========================================================================= */
+function csvEscape(val){
+  val = (val===null || val===undefined) ? '' : String(val);
+  if(val.indexOf(',')!==-1 || val.indexOf('"')!==-1 || val.indexOf('\n')!==-1){
+    val = '"'+val.replace(/"/g,'""')+'"';
+  }
+  return val;
+}
+function downloadTextFile(filename, content){
+  var blob = new Blob(['\uFEFF'+content], { type:'text/csv;charset=utf-8;' }); // BOM biar Excel baca UTF-8 dgn benar
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function exportCSV(filename, columns, rows){
+  if(rows.length===0){ showToast('Tidak ada data untuk di-download.', true); return; }
+  var lines = [columns.map(function(c){ return csvEscape(c.label); }).join(',')];
+  rows.forEach(function(r){
+    lines.push(columns.map(function(c){ return csvEscape(r[c.key]); }).join(','));
+  });
+  downloadTextFile(filename, lines.join('\r\n'));
+  showToast('Laporan berhasil di-download.');
+}
+function filterRows(rows, columns, query){
+  if(!query) return rows;
+  var q = query.toLowerCase();
+  return rows.filter(function(r){ return columns.some(function(c){ return String(r[c.key]||'').toLowerCase().indexOf(q)!==-1; }); });
+}
+function todayStamp(){
+  var d = new Date();
+  return d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+}
+
+function downloadDocReport(){
+  var rows = filteredDocs();
+  var cols = DOC_CONFIG.columns.concat([{ key:'tracking_status', label:'Update Tracking' }, { key:'_status', label:'Status' }]);
+  var exportRows = rows.map(function(r){
+    var copy = Object.assign({}, r);
+    copy._status = r.tanggal_terima ? 'Sudah Diambil' : 'Belum Diambil';
+    return copy;
+  });
+  exportCSV('Laporan_Arsip_Digital_'+todayStamp()+'.csv', cols, exportRows);
+}
+
+function downloadArmadaReport(){
+  var cfg = ARMADA_CONFIG[state.armadaTab];
+  var rows = filteredArmada();
+  var namaFile = state.armadaTab==='bus' ? 'Laporan_Armada_Bus_' : 'Laporan_Sopir_';
+  exportCSV(namaFile+todayStamp()+'.csv', cfg.columns, rows);
+}
+
+function downloadInvReport(){
+  var rows = filteredInv();
+  var cols = INV_CONFIG.columns.concat([{ key:'_status', label:'Status Stok' }]);
+  var exportRows = rows.map(function(r){
+    var copy = Object.assign({}, r);
+    copy._status = stockStatus(r).label;
+    return copy;
+  });
+  exportCSV('Laporan_Inventaris_'+todayStamp()+'.csv', cols, exportRows);
+}
+
+function downloadUserReport(){
+  var rows = filteredUsers();
+  exportCSV('Laporan_Pengguna_'+todayStamp()+'.csv', USER_CONFIG.columns, rows);
+}
+
+function downloadDashboardReport(){
+  var stats = state.lastStats;
+  if(!stats){ showToast('Data dashboard belum dimuat, coba lagi sebentar.', true); return; }
+  var lines = [];
+  lines.push(['Ringkasan Dashboard - GA Travel & Transport'].map(csvEscape).join(','));
+  lines.push(['Tanggal Export', new Date().toLocaleString('id-ID')].map(csvEscape).join(','));
+  lines.push('');
+  lines.push(['Metrik','Nilai'].map(csvEscape).join(','));
+  lines.push(['Total Arsip Digital', stats.totalDocs].map(csvEscape).join(','));
+  lines.push(['Total Armada', stats.totalBuses].map(csvEscape).join(','));
+  lines.push(['Armada Aktif', stats.busAktif].map(csvEscape).join(','));
+  lines.push(['Armada Standby', stats.busStandby].map(csvEscape).join(','));
+  lines.push(['Armada Breakdown', stats.busBreakdown].map(csvEscape).join(','));
+  lines.push(['Sopir Permanent', stats.driverPermanent].map(csvEscape).join(','));
+  lines.push(['Sopir Kontrak', stats.driverKontrak].map(csvEscape).join(','));
+  lines.push(['Sopir Orientasi', stats.driverOrientasi].map(csvEscape).join(','));
+  lines.push(['Dokumen Sudah Diambil (%)', stats.compliance].map(csvEscape).join(','));
+  lines.push('');
+  lines.push(['Distribusi Dokumen per Kategori'].map(csvEscape).join(','));
+  lines.push(['Kategori','Jumlah'].map(csvEscape).join(','));
+  CATEGORY_ORDER.forEach(function(cat){ lines.push([cat, stats.categoryCounts[cat]||0].map(csvEscape).join(',')); });
+  lines.push('');
+  lines.push(['Dokumen Masih Dititipkan (Belum Diambil)'].map(csvEscape).join(','));
+  lines.push(['Nama Dokumen','Kategori','Penitip','Tempat Titip','Tanggal Titip'].map(csvEscape).join(','));
+  stats.alerts.forEach(function(a){
+    lines.push([a.nama, a.kategori, a.penitip||'', a.tempat||'', a.tanggal].map(csvEscape).join(','));
+  });
+  downloadTextFile('Ringkasan_Dashboard_'+todayStamp()+'.csv', lines.join('\r\n'));
+  showToast('Ringkasan dashboard berhasil di-download.');
+}
+
+/* ---------------- INIT ---------------- */
+updateArmadaStatusFilterOptions();
+initAuth();
+</script>
+</body>
+</html>
