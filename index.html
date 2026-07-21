@@ -610,6 +610,7 @@ var DOC_CONFIG = {
     { key:'tempat_titip', label:'Tempat Titip', type:'text', required:true },
     { key:'tanggal_serah_terima', label:'Tanggal Serah Terima (opsional, isi saat sudah diambil)', type:'date', required:false },
     { key:'penerima', label:'Penerima (opsional, isi saat sudah diambil)', type:'text', required:false },
+    { key:'tracking_status', label:'Update Tracking / Posisi Berkas Saat Ini', type:'text', required:false },
     { key:'keterangan', label:'Keterangan (opsional)', type:'text', required:false }
   ]
 };
@@ -937,7 +938,7 @@ function filteredDocs(){
   var kategori=document.getElementById('filterArsipKategori').value;
   var status=document.getElementById('filterArsipStatus').value;
   var rows = state.docs.filter(function(r){
-    if(q && !DOC_CONFIG.columns.some(function(c){ return String(r[c.key]||'').toLowerCase().indexOf(q)!==-1; })) return false;
+    if(q && !DOC_CONFIG.columns.some(function(c){ return String(r[c.key]||'').toLowerCase().indexOf(q)!==-1; }) && String(r.tracking_status||'').toLowerCase().indexOf(q)===-1) return false;
     if(kategori && r.kategori!==kategori) return false;
     if(status==='belum' && r.tanggal_serah_terima) return false;
     if(status==='sudah' && !r.tanggal_serah_terima) return false;
@@ -952,7 +953,15 @@ function renderDocTable(){
   var html='<table><thead><tr>'; DOC_CONFIG.columns.forEach(function(c){ html+='<th>'+c.label+'</th>'; }); html+='<th>STATUS</th><th>AKSI</th></tr></thead><tbody>';
   rows.forEach(function(r){
     var st=getDocStatus(r);
-    html+='<tr>'; DOC_CONFIG.columns.forEach(function(c){ html+='<td>'+(r[c.key]!==undefined && r[c.key]!==null?r[c.key]:'')+'</td>'; });
+    html+='<tr>';
+    DOC_CONFIG.columns.forEach(function(c){
+      var val = (r[c.key]!==undefined && r[c.key]!==null) ? r[c.key] : '';
+      if(c.key==='nama_dokumen'){
+        html+='<td>'+val+(r.tracking_status?'<div style="font-size:10.5px;color:var(--muted);margin-top:2px;">📍 '+r.tracking_status+'</div>':'')+'</td>';
+      } else {
+        html+='<td>'+val+'</td>';
+      }
+    });
     html+='<td><span class="status-chip '+st.cls+'">'+st.label+'</span></td>';
     html+='<td class="actions-cell"><button class="icon-btn" onclick="openDocForm(\''+r[DOC_CONFIG.idField]+'\')">Edit</button><button class="icon-btn" onclick="deleteDoc(\''+r[DOC_CONFIG.idField]+'\')">Hapus</button></td></tr>';
   });
